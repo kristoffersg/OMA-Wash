@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">CalendarDay</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="mon">mon</string>
+    <string name="tue">tue</string>
+    <string name="wed">wed</string>
+    <string name="thu">thu</string>
+    <string name="fri">fri</string>
+    <string name="sat">sat</string>
+    <string name="sun">sun</string>
+
+    <string name="updating"></string>
+
+    <string name="reserved">Reserved by </string>
+    <string name="notReserved">Free slot</string>
+
+
+
+</resources>
