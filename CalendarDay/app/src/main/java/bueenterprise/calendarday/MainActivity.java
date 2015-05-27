@@ -7,6 +7,9 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.text.SimpleDateFormat;
@@ -17,6 +20,7 @@ import java.util.Calendar;
 public class MainActivity extends ActionBarActivity {
 
     ListView listView;
+    GridView gridView;
     SimpleDateFormat formatter;
 
     @Override
@@ -24,9 +28,11 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setContentView(R.layout.activity_main);
-        listView = (ListView) findViewById(R.id.listView);
+
+//        listView = (ListView) findViewById(R.id.listView);
         ArrayList<TimeSlotItem> itemList;
+
+        gridView = (GridView) findViewById(R.id.gridView);
 
         Calendar length = Calendar.getInstance();
 
@@ -37,17 +43,36 @@ public class MainActivity extends ActionBarActivity {
         formatter = new SimpleDateFormat("HH:mm");
 
         Calendar start = Calendar.getInstance();
-        start.set(Calendar.HOUR_OF_DAY,0);
-        start.set(Calendar.MINUTE,00);
+        start.set(Calendar.HOUR_OF_DAY, 0);
+        start.set(Calendar.MINUTE, 00);
+
         Log.i("startCalendar", formatter.format(start.getTime()));
-
-
         Log.i("lengthCalendar", formatter.format(length.getTime()));
 
 
-        itemList = getTimeSlotItemList(start,24,length);
+//        itemList = getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
+//        ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(this.getApplicationContext(),itemList);
+//        listView.setAdapter(adapter);
 
-        listView.setAdapter(new ListViewTimeSlotsAdapter(this.getApplicationContext(), itemList));
+        itemList = getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
+        ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(this.getApplicationContext(),itemList);
+        gridView.setAdapter(adapter);
+
+        LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)gridView.getLayoutParams();
+        linearParams.width=400*7;
+        gridView.setLayoutParams(linearParams);
+        gridView.setColumnWidth(400);
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearGridContainer);
+        linearLayout.getWidth();
+
+
+//        @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+//        {
+//            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//            int height = getMeasuredHeight();
+//            super.onMeasure(MeasureSpec.makeMeasureSpec(height / 3, MeasureSpec.EXACTLY), heightMeasureSpec);
+//        }
+
     }
 
     @Override

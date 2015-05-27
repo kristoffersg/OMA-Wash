@@ -70,7 +70,7 @@ public class ListViewTimeSlotsAdapter extends BaseAdapter {
             //Log.i("Reserved check","Not reserved, room " + Integer.toString(list.get(position).getReserver()));
             reservered.setText(context.getString(R.string.notReserved));
         } else{
-            //Log.i("Reserved check","Reserved, room " + Integer.toString(list.get(position).getReserver()));
+            //Log.i("Reserved check","Reserved, room " + Integer.toString(list.get(position).getReserver()) + "Time " + list.get(position).getTime() );
             reservered.setText(context.getString(R.string.reserved) + " " + list.get(position).getReserver());
         }
 
