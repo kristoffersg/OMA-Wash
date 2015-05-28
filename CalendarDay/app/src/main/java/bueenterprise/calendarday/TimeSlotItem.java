@@ -14,6 +14,8 @@ public class TimeSlotItem {
     Calendar slotTimeLength;
     Calendar slotEndTime;
     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("FF:MM");
+
     int room;
 
     public TimeSlotItem(Calendar start, Calendar length)
@@ -44,6 +46,8 @@ public class TimeSlotItem {
     public void setSlotLength(Calendar length) {
         this.slotTimeLength = length;
     }
+
+    public Calendar getStartCalendarObject(){return slotStartTime;}
 
     // Fake class
     public int getReserver(){ return room; }

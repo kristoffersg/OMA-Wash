@@ -49,29 +49,18 @@ public class MainActivity extends ActionBarActivity {
         Log.i("startCalendar", formatter.format(start.getTime()));
         Log.i("lengthCalendar", formatter.format(length.getTime()));
 
-
-//        itemList = getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
-//        ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(this.getApplicationContext(),itemList);
-//        listView.setAdapter(adapter);
-
         itemList = getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
-        ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(this.getApplicationContext(),itemList);
+        WeekGridAdapter adapter = new WeekGridAdapter(this.getApplicationContext(),itemList);
         gridView.setAdapter(adapter);
 
         LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)gridView.getLayoutParams();
-        linearParams.width=400*7;
+        linearParams.width=225*8;
         gridView.setLayoutParams(linearParams);
-        gridView.setColumnWidth(400);
+        gridView.setColumnWidth(225);
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearGridContainer);
         linearLayout.getWidth();
 
 
-//        @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-//        {
-//            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//            int height = getMeasuredHeight();
-//            super.onMeasure(MeasureSpec.makeMeasureSpec(height / 3, MeasureSpec.EXACTLY), heightMeasureSpec);
-//        }
 
     }
 

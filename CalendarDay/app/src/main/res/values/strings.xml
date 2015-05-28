@@ -15,8 +15,8 @@
 
     <string name="updating"></string>
 
-    <string name="reserved">Reserved by </string>
-    <string name="notReserved">Free slot</string>
+    <string name="reserved">Room </string>
+    <string name="notReserved">Free</string>
 
 
 
