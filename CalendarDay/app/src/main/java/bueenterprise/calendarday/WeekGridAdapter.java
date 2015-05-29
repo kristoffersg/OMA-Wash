@@ -22,11 +22,10 @@ public class WeekGridAdapter extends BaseAdapter {
 
     Context context;
     TimeSlotItem slotTime;
-    ArrayList<TimeSlotItem> list;
+    ArrayList<ISlotItem> list;
     int count = 25*8;
-    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM");
 
-    public WeekGridAdapter(Context c, ArrayList<TimeSlotItem> list){
+    public WeekGridAdapter(Context c, ArrayList<ISlotItem> list){
         this.context = c;
         this.list = list;
     }
@@ -85,35 +84,35 @@ public class WeekGridAdapter extends BaseAdapter {
                     break;
                 case 1 :
                     timeDateRoom.setText(context.getString(R.string.mon));
-                    info.setText(formatter.format(list.get(row).getStartCalendarObject().getTime()));
+                    info.setText(list.get(row).getDate());
                     break;
                 case 2:
                     timeDateRoom.setText(context.getString(R.string.tue));
-                    info.setText(formatter.format(list.get(row).getStartCalendarObject().getTime()));
+                    info.setText(list.get(row).getDate());
                     break;
                 case 3:
                     timeDateRoom.setText(context.getString(R.string.wed));
-                    info.setText(formatter.format(list.get(row).getStartCalendarObject().getTime()));
+                    info.setText(list.get(row).getDate());
 
                     break;
                 case 4:
                     timeDateRoom.setText(context.getString(R.string.thu));
-                    info.setText(formatter.format(list.get(row).getStartCalendarObject().getTime()));
+                    info.setText(list.get(row).getDate());
 
                     break;
                 case 5:
                     timeDateRoom.setText(context.getString(R.string.fri));
-                    info.setText(formatter.format(list.get(row).getStartCalendarObject().getTime()));
+                    info.setText(list.get(row).getDate());
 
                     break;
                 case 6:
                     timeDateRoom.setText(context.getString(R.string.sat));
-                    info.setText(formatter.format(list.get(row).getStartCalendarObject().getTime()));
+                    info.setText(list.get(row).getDate());
 
                     break;
                 case 7:
                     timeDateRoom.setText(context.getString(R.string.sun));
-                    info.setText(formatter.format(list.get(row).getStartCalendarObject().getTime()));
+                    info.setText(list.get(row).getDate());
 
                     break;
             }

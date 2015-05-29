@@ -1,6 +1,7 @@
 package bueenterprise.calendarday;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -19,28 +20,23 @@ import java.util.Calendar;
 
 public class MainActivity extends ActionBarActivity {
 
-    ListView listView;
     GridView gridView;
     SimpleDateFormat formatter;
+    ISlotFactory timeSlotFac;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ArrayList<ISlotItem> itemList;
+        timeSlotFac = new TimeSlotFactory(getString(R.string.dateFormat));
+        formatter = new SimpleDateFormat("HH:mm");
 
-//        listView = (ListView) findViewById(R.id.listView);
-        ArrayList<TimeSlotItem> itemList;
-
-        gridView = (GridView) findViewById(R.id.gridView);
-
+        // Setup then then the booking starts and ends during a day
         Calendar length = Calendar.getInstance();
-
         length.set(Calendar.HOUR_OF_DAY, 1);
         length.set(Calendar.MINUTE, 00);
-
-
-        formatter = new SimpleDateFormat("HH:mm");
 
         Calendar start = Calendar.getInstance();
         start.set(Calendar.HOUR_OF_DAY, 0);
@@ -49,18 +45,29 @@ public class MainActivity extends ActionBarActivity {
         Log.i("startCalendar", formatter.format(start.getTime()));
         Log.i("lengthCalendar", formatter.format(length.getTime()));
 
-        itemList = getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
-        WeekGridAdapter adapter = new WeekGridAdapter(this.getApplicationContext(),itemList);
-        gridView.setAdapter(adapter);
-
-        LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)gridView.getLayoutParams();
-        linearParams.width=225*8;
-        gridView.setLayoutParams(linearParams);
-        gridView.setColumnWidth(225);
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearGridContainer);
-        linearLayout.getWidth();
+        // Get the configuration
+        itemList = timeSlotFac.getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
 
 
+        Configuration configInfo = getResources().getConfiguration();
+
+        if (configInfo.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        {
+            gridView = (GridView) findViewById(R.id.gridView);
+            WeekGridAdapter adapter = new WeekGridAdapter(this.getApplicationContext(),itemList);
+            gridView.setAdapter(adapter);
+            LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)gridView.getLayoutParams();
+            linearParams.width=225*8;
+            gridView.setLayoutParams(linearParams);
+            gridView.setColumnWidth(225);
+
+//            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearGridContainer);
+//            linearLayout.getWidth();
+
+        } else if (configInfo.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+
+        }
 
     }
 
@@ -107,6 +114,7 @@ public class MainActivity extends ActionBarActivity {
         if (startTime.get(Calendar.HOUR_OF_DAY)<23 && startTime.get(Calendar.MINUTE)<50)
         {
 
+
             int hours  = slotAmount * slotTimeLength.get(Calendar.HOUR_OF_DAY);
             int minutes    = slotAmount * slotTimeLength.get(Calendar.MINUTE);
             hours = hours + (minutes / 60) + startTime.get(Calendar.HOUR_OF_DAY);
@@ -133,7 +141,7 @@ public class MainActivity extends ActionBarActivity {
 
                     Log.i("startCalendar", formatter.format(newSlot.getTime()));
 
-                    item = new TimeSlotItem(newSlot,slotTimeLength);
+                    item = new TimeSlotItem(getString(R.string.dateFormat),newSlot,slotTimeLength);
                     list.add(item);
                 }
                 return list;
