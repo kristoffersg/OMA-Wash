@@ -30,6 +30,9 @@ import android.widget.Toast;
  */
 public class NavigationDrawerFragment extends Fragment {
 
+    //Change if logged in or not
+    private boolean loggedIn = false;
+
     /**
      * Remember the position of the selected item.
      */
@@ -98,6 +101,16 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
+
+        String log;
+
+        if (loggedIn==false){
+            log = getString(R.string.title_section4);
+        }
+        else{
+            log = getString(R.string.title_section5);
+        }
+
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
@@ -106,6 +119,7 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section1),
                         getString(R.string.title_section2),
                         getString(R.string.title_section3),
+                        log,
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
@@ -236,7 +250,7 @@ public class NavigationDrawerFragment extends Fragment {
         // If the drawer is open, show the global app actions in the action bar. See also
         // showGlobalContextActionBar, which controls the top-left area of the action bar.
         if (mDrawerLayout != null && isDrawerOpen()) {
-            //inflater.inflate(R.menu.global, menu);
+            inflater.inflate(R.menu.menu_main, menu);
             showGlobalContextActionBar();
         }
         super.onCreateOptionsMenu(menu, inflater);
