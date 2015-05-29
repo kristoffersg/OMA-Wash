@@ -213,6 +213,7 @@ public class NavigationDrawerFragment extends Fragment {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
+            mCallbacks.initNavigationItems();
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }
@@ -289,5 +290,6 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+        void initNavigationItems();
     }
 }

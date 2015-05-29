@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:id="@+id/timeSlot"
+    android:background="@drawable/line_right"
+    android:layout_gravity="center">
+
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal" android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="bottom|center_horizontal">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/timeDateRoom"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:textColor="@color/grayish"-->
+            <!--android:text="8 am"-->
+            <!--android:layout_gravity="bottom|center_horizontal"-->
+            <!--android:gravity="bottom|center_horizontal"-->
+            <!--/>-->
+
+    <!--</LinearLayout>-->
+    <TextView
+        android:id="@+id/timeDateRoom"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        android:textColor="@color/grayish"
+        android:text="8 am"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal|bottom"
+        />
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reserved?"
+        android:textColor="@color/secondary_text_default_material_light"
+        android:layout_gravity="right"
+        android:height="16dp"
+        android:textSize="10sp"
+        android:paddingRight="4dp" />
+
+</LinearLayout>

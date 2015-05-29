@@ -1,0 +1,160 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context="bueenterprise.calendarday.DayFragment">
+
+
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="May 24th"
+android:textSize="18sp"
+android:padding="4dp"/>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!-->-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/mon"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:clickable="true"-->
+            <!--android:id="@+id/monTextView"-->
+            <!--android:gravity="center"-->
+
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/tue"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:clickable="true"-->
+            <!--android:id="@+id/tueTextView"-->
+            <!--android:gravity="center"-->
+
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/wed"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:clickable="true"-->
+            <!--android:id="@+id/wedTextView"-->
+            <!--android:gravity="center"-->
+
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/thu"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:clickable="true"-->
+            <!--android:id="@+id/thuTextView"-->
+            <!--android:gravity="center"-->
+
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/fri"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:clickable="true"-->
+            <!--android:id="@+id/friTextView"-->
+            <!--android:gravity="center"-->
+
+            <!--/>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/sat"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:clickable="true"-->
+            <!--android:id="@+id/satTextView"-->
+            <!--android:gravity="center"-->
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/sun"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:clickable="true"-->
+            <!--android:id="@+id/sunTextView"-->
+            <!--android:gravity="center"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/dark_blue"></View>
+
+<!--<HorizontalScrollView-->
+    <!--android:id="@+id/horizontalScroll"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linearGridContainer"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<GridView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/gridView"-->
+            <!--android:numColumns="8"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+<!--</HorizontalScrollView>-->
+
+
+<!--<LinearLayout-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"-->
+<!--android:orientation="horizontal"-->
+<!-->-->
+
+<!--<ListView-->
+<!--android:id="@+id/leftListView"-->
+<!--android:layout_width="0dp"-->
+<!--android:layout_height="match_parent"-->
+<!--android:layout_weight="1"-->
+<!--/>-->
+
+<!--<ListView-->
+<!--android:id="@+id/rightListView"-->
+<!--android:layout_width="0dp"-->
+<!--android:layout_height="match_parent"-->
+<!--android:layout_weight="1"-->
+<!--/>-->
+
+<!--</LinearLayout>-->
+
+<ListView
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:id="@+id/listViewDay"
+></ListView>
+
+</LinearLayout>

@@ -3,6 +3,7 @@ package com.example.ksg.omawash;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class MainActivity extends ActionBarActivity
@@ -29,11 +34,26 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+
+    // Formatter time for the timeSlots
+    SimpleDateFormat formatter;
+
+    // Interface to the timeSlotFactory
+    ISlotFactory timeSlotFac;
+
+    // List of interfaces to the timeSlots
+    ArrayList<ISlotItem> slotItemList;
+
+    // Enum to keep track of the device orientation + field
+    public enum PhoneMode {PORTRAIT, LANDSCAPE}
+    private PhoneMode phoneMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Generated
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -44,11 +64,44 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    private void updateFragmentState(Configuration newPhoneMode)
+    {
+        //ArrayList<ISlotItem> itemArrayList; // param
+        if (Configuration.ORIENTATION_LANDSCAPE == newPhoneMode.orientation){
+            phoneMode = PhoneMode.LANDSCAPE;
+        } else phoneMode = PhoneMode.PORTRAIT;
+
+//        if (phoneMode == PhoneMode.PORTRAIT){ // If portrait use DayFragment
+//
+//            getFragmentManager().beginTransaction()
+//                    .replace(R.id.container, DayFragment.newInstance(itemArrayList))
+//                    .commit();
+//
+//        } else { // Else use landscape
+//            getFragmentManager().beginTransaction()
+//                    .replace(R.id.container, WeekFragment.newInstance(itemArrayList))
+//                    .commit();
+//        }
+    }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         switch(position){
+            case 0:
+                if (phoneMode == PhoneMode.PORTRAIT){ // If portrait use DayFragment
+
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container, DayFragment.newInstance(slotItemList))
+                            .commit();
+
+                } else { // Else use landscape
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container, WeekFragment.newInstance(slotItemList))
+                            .commit();
+                }
+                break;
             case 1:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
@@ -61,18 +114,36 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 3:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                        .commit();
-                break;
-            case 4:
-                fragmentManager.beginTransaction()
                         .replace(R.id.container, LoginFragment.newInstance(position + 1))
                         .commit();
                 break;
         }
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+
+    }
+
+    @Override
+    public void initNavigationItems() {
+        // Initiation
+        timeSlotFac = new TimeSlotFactory(getString(R.string.dateFormat));
+        formatter = new SimpleDateFormat(getString(R.string.timeFormat));
+
+        // Setup then then the booking starts and ends during a day
+        Calendar length = Calendar.getInstance();
+        length.set(Calendar.HOUR_OF_DAY, 1);
+        length.set(Calendar.MINUTE, 00);
+
+        Calendar start = Calendar.getInstance();
+        start.set(Calendar.HOUR_OF_DAY, 0);
+        start.set(Calendar.MINUTE, 00);
+
+        Log.i("startCalendar", formatter.format(start.getTime()));
+        Log.i("lengthCalendar", formatter.format(length.getTime()));
+
+        updateFragmentState(getResources().getConfiguration());
+
+        slotItemList = timeSlotFac.getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
+
+
     }
 
     public void onSectionAttached(int number) {

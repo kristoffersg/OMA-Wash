@@ -20,5 +20,20 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--Week- and day-View strings-->
 
+    <string name="mon">mon</string>
+    <string name="tue">tue</string>
+    <string name="wed">wed</string>
+    <string name="thu">thu</string>
+    <string name="fri">fri</string>
+    <string name="sat">sat</string>
+    <string name="sun">sun</string>
+
+    <!--time format for the app-->
+    <string name="dateFormat">MM/dd</string>>
+    <string name="timeFormat">HH/mm</string>>
+
+    <string name="reserved">Room </string>
+    <string name="notReserved">Free</string>
 </resources>
