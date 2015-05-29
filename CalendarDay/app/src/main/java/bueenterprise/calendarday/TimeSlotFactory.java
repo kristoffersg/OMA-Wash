@@ -19,6 +19,10 @@ public class TimeSlotFactory implements ISlotFactory {
     {
         this.dateFormat = dateFormat;
     }
+
+    /*
+        The slots should at least be 10 min
+    */
     @Override
     public ArrayList<ISlotItem> getTimeSlotItemList(Calendar start, int Amount, Calendar length) {
 

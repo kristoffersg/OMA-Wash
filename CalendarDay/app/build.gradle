@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "bueenterprise.calendarday"
-        minSdkVersion 10
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"

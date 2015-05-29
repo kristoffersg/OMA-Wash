@@ -1,12 +1,15 @@
 package bueenterprise.calendarday;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -22,10 +25,13 @@ public class DayFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_LIST   = "slotList";
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ArrayList<ISlotItem> list;
 
     private OnFragmentInteractionListener mListener;
 
@@ -38,11 +44,23 @@ public class DayFragment extends Fragment {
      * @return A new instance of fragment DayFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DayFragment newInstance(String param1, String param2) {
+    public static DayFragment newInstance(String param1, String param2, ArrayList<ISlotItem> list) {
         DayFragment fragment = new DayFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_LIST, list);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static DayFragment newInstance(ArrayList<ISlotItem> list) {
+        DayFragment fragment = new DayFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, ""); // should not be here
+        args.putString(ARG_PARAM2, "");
+        args.putSerializable(ARG_LIST, list);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,14 +75,23 @@ public class DayFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            list    = (ArrayList<ISlotItem>) getArguments().getSerializable(ARG_LIST);
         }
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_day, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_day, container, false);
+        ListView listView;
+
+        listView = (ListView) rootView.findViewById(R.id.listViewDay);
+        ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(getActivity().getApplicationContext(),list);
+        listView.setAdapter(adapter);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -77,12 +104,12 @@ public class DayFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        try {
+//            mListener = (OnFragmentInteractionListener) activity;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(activity.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override

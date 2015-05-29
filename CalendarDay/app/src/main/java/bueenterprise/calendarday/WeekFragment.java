@@ -1,12 +1,16 @@
 package bueenterprise.calendarday;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,10 +25,13 @@ public class WeekFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_LIST   = "slotList";
+
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String mParam1 = "";
+    private String mParam2 = "";
+    private ArrayList<ISlotItem> list;
 
     private OnFragmentInteractionListener mListener;
 
@@ -37,11 +44,23 @@ public class WeekFragment extends Fragment {
      * @return A new instance of fragment LandscapeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WeekFragment newInstance(String param1, String param2) {
+    public static WeekFragment newInstance(String param1, String param2, ArrayList<ISlotItem> list) {
         WeekFragment fragment = new WeekFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_LIST, list);
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+    public static WeekFragment newInstance(ArrayList<ISlotItem> list) {
+        WeekFragment fragment = new WeekFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, ""); // should not be here
+        args.putString(ARG_PARAM2, "");
+        args.putSerializable(ARG_LIST, list);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,13 +75,25 @@ public class WeekFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            list    = (ArrayList<ISlotItem>) getArguments().getSerializable(ARG_LIST);
+
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.week_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.week_fragment, container, false);
+        GridView gridView;
+
+        gridView = (GridView) rootView.findViewById(R.id.gridView);
+        WeekGridAdapter adapter = new WeekGridAdapter(getActivity().getApplicationContext(),list);
+        gridView.setAdapter(adapter);
+        LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)gridView.getLayoutParams();
+        linearParams.width=225*8;
+        gridView.setLayoutParams(linearParams);
+        gridView.setColumnWidth(225);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -75,12 +106,12 @@ public class WeekFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        try {
+//            mListener = (OnFragmentInteractionListener) activity;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(activity.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override
