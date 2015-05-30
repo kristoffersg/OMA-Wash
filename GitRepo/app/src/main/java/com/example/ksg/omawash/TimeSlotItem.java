@@ -1,5 +1,6 @@
 package com.example.ksg.omawash;
 
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -15,7 +16,7 @@ public class TimeSlotItem implements ISlotItem {
 
     SimpleDateFormat timeFormat;
     SimpleDateFormat dateFormat;
-
+    SimpleDateFormat dateTitleFormat;
 
     int room;
 
@@ -25,6 +26,8 @@ public class TimeSlotItem implements ISlotItem {
         this.slotTimeLength = length;
         this.strDateFormat = dateFormat;
         this.timeFormat = new SimpleDateFormat("HH:mm");
+        this.dateTitleFormat = new SimpleDateFormat("d MMM");
+
         this.dateFormat = new SimpleDateFormat(dateFormat);
 
         room = -1;
@@ -37,6 +40,12 @@ public class TimeSlotItem implements ISlotItem {
     @Override
     public String getTime() {
         return timeFormat.format(slotStartTime.getTime());
+    }
+
+    @Override
+    public String getDateTitle() {
+        return dateTitleFormat.format(slotStartTime.getTime());
+//        return dateFormat     .format(slotStartTime.getTime());
     }
 
     @Override

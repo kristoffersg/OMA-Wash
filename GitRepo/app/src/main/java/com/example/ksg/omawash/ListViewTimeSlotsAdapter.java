@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -21,6 +23,7 @@ public class ListViewTimeSlotsAdapter extends BaseAdapter {
     public ListViewTimeSlotsAdapter(Context c, ArrayList<ISlotItem> list){
         this.context = c;
         this.list = list;
+
     }
 
     @Override
@@ -55,6 +58,7 @@ public class ListViewTimeSlotsAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.time_slot,null);
         }
+
         TextView reservered = (TextView) view.findViewById(R.id.reservedTextView);
         TextView slotTime = (TextView) view.findViewById(R.id.timeTextView);
         TextView slotEndTime = (TextView) view.findViewById(R.id.endTimeTextView);

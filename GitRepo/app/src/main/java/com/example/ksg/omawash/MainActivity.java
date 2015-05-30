@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -37,6 +38,10 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
 
 
+    // ViewPager
+    ViewPager pager;
+    DayFragmentAdapter pagerAdapter;
+
     // Formatter time for the timeSlots
     SimpleDateFormat formatter;
 
@@ -45,6 +50,7 @@ public class MainActivity extends ActionBarActivity
 
     // List of interfaces to the timeSlots
     ArrayList<ISlotItem> slotItemList;
+    ArrayList<ArrayList<ISlotItem>> weekList;
 
     // Enum to keep track of the device orientation + field
     public enum PhoneMode {PORTRAIT, LANDSCAPE}
@@ -96,7 +102,7 @@ public class MainActivity extends ActionBarActivity
                 if (phoneMode == PhoneMode.PORTRAIT){ // If portrait use DayFragment
 
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.container, DayFragment.newInstance(slotItemList))
+                            .replace(R.id.container, DayFragment.newInstance(weekList.get(0)))
                             .commit();
 
                 } else { // Else use landscape
@@ -144,8 +150,8 @@ public class MainActivity extends ActionBarActivity
 
         updateFragmentState(getResources().getConfiguration());
 
-        slotItemList = timeSlotFac.getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
-
+        slotItemList    = timeSlotFac.getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
+        weekList        = timeSlotFac.getWeekList((Calendar)start.clone(),24,(Calendar)length.clone());
 
     }
 

@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -35,6 +37,10 @@ public class DayFragment extends Fragment{
     private String mParam1;
     private String mParam2;
     private ArrayList<ISlotItem> list;
+
+
+    SimpleDateFormat dateTitleFormat;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -91,6 +97,10 @@ public class DayFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_day, container, false);
 
         ListView listView;
+        String date = list.get(0).getDateTitle();
+
+        TextView dateTv = (TextView) rootView.findViewById(R.id.dateTitle);
+        dateTv.setText(date);
 
         listView = (ListView) rootView.findViewById(R.id.listViewDay);
         ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(getActivity().getApplicationContext(),list);

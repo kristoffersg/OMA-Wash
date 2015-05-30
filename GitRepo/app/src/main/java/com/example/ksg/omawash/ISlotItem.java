@@ -1,12 +1,16 @@
 package com.example.ksg.omawash;
 
-import java.lang.String;import java.util.Calendar;
+import java.lang.String;
+import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by lassebuesvendsen on 29/05/15.
  */
 public interface ISlotItem {
     String getTime();
+
+    String getDateTitle();
 
     void setStartTime(Calendar startTime);
 
@@ -24,4 +28,6 @@ public interface ISlotItem {
     void setReserver(int room);
 
     void setDateFormat(String dateFormat);
+
+
 }
