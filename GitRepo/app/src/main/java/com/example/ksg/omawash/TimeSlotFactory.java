@@ -20,6 +20,20 @@ public class TimeSlotFactory implements ISlotFactory {
     /*
         The slots should at least be 10 min
     */
+
+    public ArrayList<ArrayList<ISlotItem>> getWeekList(Calendar start, int Amount, Calendar length)
+    {
+        ArrayList<ArrayList<ISlotItem>> weekList = new ArrayList<>();
+        for (int i = 0; i < 7; i++ )
+        {
+            start.add(Calendar.HOUR_OF_DAY,24*i);
+            length.add(Calendar.HOUR_OF_DAY,24*i);
+
+            weekList.add(getTimeSlotItemList((Calendar)start.clone(),Amount,(Calendar)length.clone()));
+        }
+        return weekList;
+    }
+
     @Override
     public ArrayList<ISlotItem> getTimeSlotItemList(Calendar start, int Amount, Calendar length) {
 

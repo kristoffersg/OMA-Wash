@@ -1,7 +1,5 @@
 package bueenterprise.calendarday;
 
-import android.content.Context;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 

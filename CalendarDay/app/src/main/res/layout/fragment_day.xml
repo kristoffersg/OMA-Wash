@@ -6,6 +6,7 @@ android:orientation="vertical"
 tools:context="bueenterprise.calendarday.DayFragment">
 
 
+
 <TextView
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
@@ -151,7 +152,13 @@ android:padding="4dp"/>
 
 <!--</LinearLayout>-->
 
-<ListView
+    <ImageSwitcher
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageSwitcher"
+        android:layout_gravity="right" />
+
+    <ListView
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:id="@+id/listViewDay"

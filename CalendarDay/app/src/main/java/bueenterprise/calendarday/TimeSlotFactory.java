@@ -1,8 +1,5 @@
 package bueenterprise.calendarday;
 
-import android.content.Context;
-import android.support.annotation.StringDef;
-import android.text.format.Time;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
