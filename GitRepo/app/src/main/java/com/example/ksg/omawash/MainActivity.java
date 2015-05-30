@@ -3,6 +3,7 @@ package com.example.ksg.omawash;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -25,7 +26,7 @@ import com.facebook.FacebookSdk;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, LoginFragment.ILoginFragment{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -51,6 +52,23 @@ public class MainActivity extends ActionBarActivity
     // List of interfaces to the timeSlots
     ArrayList<ISlotItem> slotItemList;
     ArrayList<ArrayList<ISlotItem>> weekList;
+    Fragment loginFragment;
+
+    @Override
+    public void onLoginSucces() {
+        onNavigationDrawerItemSelected(0);
+    }
+
+    @Override
+    public void onLoginCancel() {
+
+    }
+
+    @Override
+    public void onLoginError() {
+
+    }
+
 
     // Enum to keep track of the device orientation + field
     public enum PhoneMode {PORTRAIT, LANDSCAPE}
@@ -93,6 +111,20 @@ public class MainActivity extends ActionBarActivity
 //        }
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(loginFragment != null) {
+            loginFragment.onActivityResult(requestCode, resultCode, data);
+        }
+//        Fragment fragment = getFragmentManager().findFragmentById(R.id.container);
+//
+//        if (fragment.getTag().equals("loginfragment")){
+//            fragment.onActivityResult(requestCode, resultCode, data);
+//        }
+    }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
@@ -122,8 +154,9 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 3:
+                loginFragment = LoginFragment.newInstance();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, LoginFragment.newInstance())
+                        .replace(R.id.container, loginFragment)
                         .commit();
                 break;
         }
@@ -151,7 +184,7 @@ public class MainActivity extends ActionBarActivity
         updateFragmentState(getResources().getConfiguration());
 
         slotItemList    = timeSlotFac.getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
-        weekList        = timeSlotFac.getWeekList((Calendar)start.clone(),24,(Calendar)length.clone());
+        weekList        = timeSlotFac.getWeekList((Calendar) start.clone(), 24, (Calendar) length.clone());
 
     }
 
