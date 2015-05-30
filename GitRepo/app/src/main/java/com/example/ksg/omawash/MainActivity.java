@@ -20,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import com.facebook.FacebookSdk;
+
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks{
@@ -51,6 +53,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
 
         // Generated
@@ -114,7 +117,7 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 3:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, LoginFragment.newInstance(position + 1))
+                        .replace(R.id.container, LoginFragment.newInstance())
                         .commit();
                 break;
         }

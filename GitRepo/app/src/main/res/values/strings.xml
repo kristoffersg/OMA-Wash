@@ -13,12 +13,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!--   Log in   -->
-    <string name="login_text">Login</string>
-    <string name="ok_Btn">OK</string>
-    <string name="cancel_btn">Cancel</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="facebook_app_id">939622522754796</string>
+    <string name="login_text">Login with your facebook account</string>
 
     <!--Week- and day-View strings-->
 
@@ -36,4 +32,8 @@
 
     <string name="reserved">Room </string>
     <string name="notReserved">Free</string>
+    <string name="title_activity_login">Login</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
