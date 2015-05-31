@@ -30,9 +30,6 @@ import android.widget.Toast;
  */
 public class NavigationDrawerFragment extends Fragment {
 
-    //Change if logged in or not
-    private boolean loggedIn = false;
-
     /**
      * Remember the position of the selected item.
      */
@@ -61,6 +58,9 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
+    // Login status
+    private boolean loggedIn = false;
 
     public NavigationDrawerFragment() {
     }
@@ -102,14 +102,7 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        String log;
-
-        if (loggedIn==false){
-            log = getString(R.string.title_section4);
-        }
-        else{
-            log = getString(R.string.title_section5);
-        }
+        String log = changeLogInStatus(loggedIn);
 
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
@@ -136,10 +129,10 @@ public class NavigationDrawerFragment extends Fragment {
      * @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
-    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout, boolean loggedIn) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
-
+        this.loggedIn = loggedIn;
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
@@ -291,5 +284,18 @@ public class NavigationDrawerFragment extends Fragment {
          */
         void onNavigationDrawerItemSelected(int position);
         void initNavigationItems();
+    }
+
+    public String changeLogInStatus(boolean loggedInStatus)
+    {
+        loggedIn = loggedInStatus;
+        String str;
+        if (loggedInStatus){
+            str = getString(R.string.title_section5);
+        }
+        else{
+            str= getString(R.string.title_section4);
+        }
+        return str;
     }
 }

@@ -26,7 +26,7 @@ import com.facebook.FacebookSdk;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, LoginFragment.ILoginFragment{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, LoginFragment.ILoginFragment, LoginFragment.IMenuBarTitle{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -37,6 +37,9 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    //Change if logged in or not
+    private boolean loggedIn = false;
+
 
 
     // ViewPager
@@ -52,21 +55,33 @@ public class MainActivity extends ActionBarActivity
     // List of interfaces to the timeSlots
     ArrayList<ISlotItem> slotItemList;
     ArrayList<ArrayList<ISlotItem>> weekList;
-    Fragment loginFragment;
+    LoginFragment loginFragment;
+
+
+
 
     @Override
     public void onLoginSucces() {
         onNavigationDrawerItemSelected(0);
+        loggedIn = true;
+        mNavigationDrawerFragment.changeLogInStatus(loggedIn);
     }
 
+    // TODO: Check what should be done, if log in is canceled, maybe change the current fragment
     @Override
     public void onLoginCancel() {
 
     }
 
+    // TODO: Maybe display a dialog
     @Override
     public void onLoginError() {
 
+    }
+
+    @Override
+    public void changeMenuBarTitle(int sectionNumber) {
+        onSectionAttached(sectionNumber);
     }
 
 
@@ -87,7 +102,7 @@ public class MainActivity extends ActionBarActivity
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+                (DrawerLayout) findViewById(R.id.drawer_layout),loggedIn);
 
     }
 
@@ -134,12 +149,12 @@ public class MainActivity extends ActionBarActivity
                 if (phoneMode == PhoneMode.PORTRAIT){ // If portrait use DayFragment
 
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.container, DayFragment.newInstance(weekList.get(0)))
+                            .replace(R.id.container, DayFragment.newInstance( position+1 ,weekList.get(0)))
                             .commit();
 
                 } else { // Else use landscape
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.container, WeekFragment.newInstance(slotItemList))
+                            .replace(R.id.container, WeekFragment.newInstance( position+1, slotItemList))
                             .commit();
                 }
                 break;
@@ -154,7 +169,7 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 3:
-                loginFragment = LoginFragment.newInstance();
+                loginFragment = LoginFragment.newInstance(position +1);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, loginFragment)
                         .commit();
@@ -220,6 +235,7 @@ public class MainActivity extends ActionBarActivity
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.menu_main, menu);
+
             restoreActionBar();
             return true;
         }
@@ -291,4 +307,5 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
 }

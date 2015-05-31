@@ -17,6 +17,8 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,12 +33,16 @@ public class LoginFragment extends Fragment {
     private ILoginFragment mListener;
     private LoginButton loginButton;
 
-    public static LoginFragment newInstance() {
+    private static final String ARG_SECTION   = "section_number";
+    private int sectionNumber;
+
+
+    public static LoginFragment newInstance(int sectionNumber) {
         LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
+        args.putInt(ARG_SECTION, sectionNumber);
 //        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -50,10 +56,9 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
+        if (getArguments() != null) {
 //            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
+        }
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
 
         callbackManager = CallbackManager.Factory.create();
@@ -96,6 +101,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
+
         return rootView;
     }
 
@@ -119,6 +125,7 @@ public class LoginFragment extends Fragment {
         super.onAttach(activity);
         try {
             mListener = (ILoginFragment) activity;
+            ((LoginFragment.IMenuBarTitle) activity).changeMenuBarTitle(getArguments().getInt(ARG_SECTION));
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -145,6 +152,10 @@ public class LoginFragment extends Fragment {
         public void onLoginSucces();
         public void onLoginCancel();
         public void onLoginError();
+    }
+
+    public interface IMenuBarTitle{
+        public void changeMenuBarTitle(int sectionNumber);
     }
 
 }

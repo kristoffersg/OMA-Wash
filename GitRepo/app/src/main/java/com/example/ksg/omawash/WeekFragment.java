@@ -24,13 +24,13 @@ public class WeekFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_SECTION = "sectionNumber";
     private static final String ARG_LIST   = "slotList";
 
 
     // TODO: Rename and change types of parameters
     private String mParam1 = "";
-    private String mParam2 = "";
+    private int sectionNumber;
     private ArrayList<ISlotItem> list;
 
     private OnFragmentInteractionListener mListener;
@@ -48,17 +48,17 @@ public class WeekFragment extends Fragment {
         WeekFragment fragment = new WeekFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+//        args.putString(ARG_PARAM2, param2);
         args.putSerializable(ARG_LIST, list);
 
         fragment.setArguments(args);
         return fragment;
     }
-    public static WeekFragment newInstance(ArrayList<ISlotItem> list) {
+    public static WeekFragment newInstance( int sectionNumber ,ArrayList<ISlotItem> list) {
         WeekFragment fragment = new WeekFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, ""); // should not be here
-        args.putString(ARG_PARAM2, "");
+        args.putInt(ARG_SECTION, sectionNumber);
         args.putSerializable(ARG_LIST, list);
 
         fragment.setArguments(args);
@@ -73,8 +73,7 @@ public class WeekFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+//            mParam1 = getArguments().getString(ARG_PARAM1);
             list    = (ArrayList<ISlotItem>) getArguments().getSerializable(ARG_LIST);
 
         }
@@ -106,12 +105,15 @@ public class WeekFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        try {
+        try {
+            ((LoginFragment.IMenuBarTitle) activity)
+                    .changeMenuBarTitle(getArguments().getInt(ARG_SECTION));
 //            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
