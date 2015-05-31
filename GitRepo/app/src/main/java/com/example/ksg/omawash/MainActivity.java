@@ -43,8 +43,8 @@ public class MainActivity extends ActionBarActivity
 
 
     // ViewPager
-    ViewPager pager;
-    DayFragmentAdapter pagerAdapter;
+//    ViewPager pager;
+//    DayFragmentAdapter pagerAdapter;
 
     // Formatter time for the timeSlots
     SimpleDateFormat formatter;
@@ -215,7 +215,12 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_section3);
                 break;
             case 4:
-                mTitle = getString(R.string.title_section4);
+                if (loggedIn)
+                {
+                    mTitle = getString(R.string.title_section5);
+
+                } else mTitle = getString(R.string.title_section4);
+
                 break;
         }
     }
