@@ -36,4 +36,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!--   Parse   -->
+    <string name="application_id">UzIlMkzLB6oLzvlO7UaQFHurRleDm9EhpqsLM3ra</string>
+    <string name="client_key">I5ZcOCcvujI18PEpf8Ult4UOC1PJVlhcTetiEDow</string>
 </resources>

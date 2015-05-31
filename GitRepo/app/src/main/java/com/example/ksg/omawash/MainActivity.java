@@ -21,8 +21,16 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import com.facebook.FacebookSdk;
+import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 
 public class MainActivity extends ActionBarActivity
@@ -65,11 +73,13 @@ public class MainActivity extends ActionBarActivity
         onNavigationDrawerItemSelected(0);
         loggedIn = true;
         mNavigationDrawerFragment.changeLogInStatus(loggedIn);
+        createParseUser();
     }
 
     // TODO: Check what should be done, if log in is canceled, maybe change the current fragment
     @Override
     public void onLoginCancel() {
+
 
     }
 
@@ -84,6 +94,10 @@ public class MainActivity extends ActionBarActivity
         onSectionAttached(sectionNumber);
     }
 
+    public void onButtonPressed(View view) {
+        createParseUser();
+    }
+
 
     // Enum to keep track of the device orientation + field
     public enum PhoneMode {PORTRAIT, LANDSCAPE}
@@ -93,6 +107,11 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        // Enable Local Datastore.
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, getString(R.string.application_id), getString(R.string.client_key));
+        ParseFacebookUtils.initialize(this);
+
         setContentView(R.layout.activity_main);
 
         // Generated
@@ -104,6 +123,26 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout),loggedIn);
 
+    }
+
+    public void createParseUser(){
+
+        final List<String> permissions = new ArrayList<String>();
+        permissions.add("public_profile");
+        permissions.add("user_friends");
+
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(this, permissions, new LogInCallback() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if (parseUser == null) {
+                    Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+                } else if (parseUser.isNew()) {
+                    Log.d("MyApp", "User signed up and logged in through Facebook!");
+                } else {
+                    Log.d("MyApp", "User logged in through Facebook!");
+                }
+            }
+        });
     }
 
     private void updateFragmentState(Configuration newPhoneMode)
@@ -130,9 +169,10 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(loginFragment != null) {
-            loginFragment.onActivityResult(requestCode, resultCode, data);
-        }
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+//        if(loginFragment != null) {
+//            loginFragment.onActivityResult(requestCode, resultCode, data);
+//        }
 //        Fragment fragment = getFragmentManager().findFragmentById(R.id.container);
 //
 //        if (fragment.getTag().equals("loginfragment")){

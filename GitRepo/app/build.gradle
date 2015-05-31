@@ -29,4 +29,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:7.3.0'
     compile 'com.facebook.android:facebook-android-sdk:4.1.0'
     compile 'com.android.support:support-v13:21.0.3'
+    compile 'com.parse.bolts:bolts-android:1.+'
+    compile fileTree(dir: 'libs', include: 'Parse-*.jar')
+    compile fileTree(dir: 'libs', include: 'ParseFacebookUtilsV4-*.jar')
 }

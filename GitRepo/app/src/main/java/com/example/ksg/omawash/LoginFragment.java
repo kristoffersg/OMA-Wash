@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.facebook.FacebookSdk;
 import com.facebook.CallbackManager;
@@ -110,7 +111,6 @@ public class LoginFragment extends Fragment {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -152,10 +152,12 @@ public class LoginFragment extends Fragment {
         public void onLoginSucces();
         public void onLoginCancel();
         public void onLoginError();
+        public void createParseUser();
     }
 
     public interface IMenuBarTitle{
         public void changeMenuBarTitle(int sectionNumber);
     }
+
 
 }
