@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,7 +49,7 @@ public class CalendarDayAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(final ViewGroup container, final int position) {
 
 //        if(view == null)
 //        {
@@ -58,6 +60,17 @@ public class CalendarDayAdapter extends PagerAdapter {
 
         TextView dateTitle = (TextView) view.findViewById(R.id.dateTitle);
         ListView listView = (ListView) view.findViewById(R.id.listViewDay);
+        listView.setFocusable(true);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // TODO: Pass the item on
+
+                ISlotItem item = (ISlotItem) adapterView.getItemAtPosition(i);
+                Log.e("ListViewAdapter","Date : " + item.getDate() + " Time: " + item.getTime());
+
+            }
+        });
 
 //
 //        LinearLayout layout = new LinearLayout(context);
