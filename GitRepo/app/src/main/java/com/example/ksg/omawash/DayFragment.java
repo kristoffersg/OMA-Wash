@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,18 +98,27 @@ public class DayFragment extends Fragment{
 
         ViewPager pager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
-//        pager.setAdapter(new CalendarDayAdapter(getActivity().getApplicationContext(),list));
-//
+        pager.setAdapter(new CalendarDayAdapter(getActivity().getApplicationContext(),list));
+
+        pager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("ViewPager", "Click" );
+            }
+        });
 
 //        ListView listView;
-//        String date = list.get(0).getDateTitle();
+//        String date = list.get(0).get(0).getDateTitle();
 //
 //        TextView dateTv = (TextView) rootView.findViewById(R.id.dateTitle);
 //        dateTv.setText(date);
 //
 //        listView = (ListView) rootView.findViewById(R.id.listViewDay);
-//        ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(getActivity().getApplicationContext(),list);
+//        ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(getActivity()
+//                .getApplicationContext(),list.get(0));
+//
 //        listView.setAdapter(adapter);
+
         return rootView;
     }
 

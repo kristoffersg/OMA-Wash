@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
@@ -31,7 +33,7 @@ public class WeekFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1 = "";
     private int sectionNumber;
-    private ArrayList<ISlotItem> list;
+    private ArrayList<ArrayList<ISlotItem>> list;
 
     private OnFragmentInteractionListener mListener;
 
@@ -44,7 +46,9 @@ public class WeekFragment extends Fragment {
      * @return A new instance of fragment LandscapeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WeekFragment newInstance(String param1, String param2, ArrayList<ISlotItem> list) {
+    public static WeekFragment newInstance(String param1, String param2
+            , ArrayList<ArrayList<ISlotItem>> list)
+    {
         WeekFragment fragment = new WeekFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -54,7 +58,7 @@ public class WeekFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    public static WeekFragment newInstance( int sectionNumber ,ArrayList<ISlotItem> list) {
+    public static WeekFragment newInstance( int sectionNumber , ArrayList<ArrayList<ISlotItem>> list) {
         WeekFragment fragment = new WeekFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, ""); // should not be here
@@ -73,8 +77,7 @@ public class WeekFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-            list    = (ArrayList<ISlotItem>) getArguments().getSerializable(ARG_LIST);
+            list    = (ArrayList<ArrayList<ISlotItem>>) getArguments().getSerializable(ARG_LIST);
 
         }
     }
@@ -92,6 +95,19 @@ public class WeekFragment extends Fragment {
         linearParams.width=225*8;
         gridView.setLayoutParams(linearParams);
         gridView.setColumnWidth(225);
+
+
+        // TODO: Define event then WeekCalendar is Clicked
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                ISlotItem item = (ISlotItem) adapterView.getItemAtPosition(position);
+                if(item != null)
+                    Log.i("WeekCalendar","Date :" + item.getDate() + " Time :" + item.getTime());
+                else Log.i("WeekCalendar"," == null");
+
+            }
+        });
         return rootView;
     }
 

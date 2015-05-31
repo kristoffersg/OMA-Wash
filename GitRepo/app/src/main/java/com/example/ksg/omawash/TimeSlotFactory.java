@@ -12,6 +12,8 @@ import java.util.Calendar;
 public class TimeSlotFactory implements ISlotFactory {
 
     String dateFormat;
+
+
     public TimeSlotFactory(String dateFormat)
     {
         this.dateFormat = dateFormat;
@@ -23,13 +25,19 @@ public class TimeSlotFactory implements ISlotFactory {
 
     public ArrayList<ArrayList<ISlotItem>> getWeekList(Calendar start, int Amount, Calendar length)
     {
+        Calendar newStart;
+        Calendar newLengt;
+
         ArrayList<ArrayList<ISlotItem>> weekList = new ArrayList<>();
         for (int i = 0; i < 7; i++ )
         {
-            start.add(Calendar.HOUR_OF_DAY,24*i);
-            length.add(Calendar.HOUR_OF_DAY,24*i);
+            newStart = (Calendar)start.clone();
+            newLengt = (Calendar)length.clone();
 
-            weekList.add(getTimeSlotItemList((Calendar)start.clone(),Amount,(Calendar)length.clone()));
+            newStart.add(Calendar.HOUR_OF_DAY,24*i);
+            newLengt.add(Calendar.HOUR_OF_DAY, 24 * i);
+
+            weekList.add(getTimeSlotItemList(newStart,Amount,newLengt));
         }
         return weekList;
     }

@@ -154,7 +154,7 @@ public class MainActivity extends ActionBarActivity
 
                 } else { // Else use landscape
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.container, WeekFragment.newInstance( position+1, slotItemList))
+                            .replace(R.id.container, WeekFragment.newInstance( position+1, weekList))
                             .commit();
                 }
                 break;
