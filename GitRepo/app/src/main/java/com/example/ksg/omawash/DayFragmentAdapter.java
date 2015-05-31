@@ -22,8 +22,8 @@ public class DayFragmentAdapter extends FragmentPagerAdapter
 
     @Override
     public Fragment getItem(int position) {
-        dayList = weekList.get(position);
-        return DayFragment.newInstance(1,dayList);
+        //dayList = weekList.get(position);
+        return DayFragment.newInstance(1,weekList);
     }
 
     @Override

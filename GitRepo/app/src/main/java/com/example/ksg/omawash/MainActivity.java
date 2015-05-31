@@ -149,7 +149,7 @@ public class MainActivity extends ActionBarActivity
                 if (phoneMode == PhoneMode.PORTRAIT){ // If portrait use DayFragment
 
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.container, DayFragment.newInstance( position+1 ,weekList.get(0)))
+                            .replace(R.id.container, DayFragment.newInstance( position+1 ,weekList))
                             .commit();
 
                 } else { // Else use landscape

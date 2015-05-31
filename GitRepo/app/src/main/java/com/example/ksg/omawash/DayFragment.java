@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ public class DayFragment extends Fragment{
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-    private ArrayList<ISlotItem> list;
+    private ArrayList<ArrayList<ISlotItem>> list;
 
 
     SimpleDateFormat dateTitleFormat;
@@ -62,7 +63,7 @@ public class DayFragment extends Fragment{
         return fragment;
     }
 
-    public static DayFragment newInstance( int sectionNumber, ArrayList<ISlotItem> list) {
+    public static DayFragment newInstance( int sectionNumber,  ArrayList<ArrayList<ISlotItem>> list) {
         DayFragment fragment = new DayFragment();
         Bundle args = new Bundle();
 //        args.putString(ARG_PARAM1, ""); // should not be here
@@ -82,7 +83,7 @@ public class DayFragment extends Fragment{
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            list    = (ArrayList<ISlotItem>) getArguments().getSerializable(ARG_LIST);
+            list = (ArrayList<ArrayList<ISlotItem>>) getArguments().getSerializable(ARG_LIST);
         }
     }
 
@@ -92,17 +93,22 @@ public class DayFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_day, container, false);
+        View rootView = inflater.inflate(R.layout.calendar_day_view_pager, container, false);
 
-        ListView listView;
-        String date = list.get(0).getDateTitle();
+        ViewPager pager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
-        TextView dateTv = (TextView) rootView.findViewById(R.id.dateTitle);
-        dateTv.setText(date);
+//        pager.setAdapter(new CalendarDayAdapter(getActivity().getApplicationContext(),list));
+//
 
-        listView = (ListView) rootView.findViewById(R.id.listViewDay);
-        ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(getActivity().getApplicationContext(),list);
-        listView.setAdapter(adapter);
+//        ListView listView;
+//        String date = list.get(0).getDateTitle();
+//
+//        TextView dateTv = (TextView) rootView.findViewById(R.id.dateTitle);
+//        dateTv.setText(date);
+//
+//        listView = (ListView) rootView.findViewById(R.id.listViewDay);
+//        ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(getActivity().getApplicationContext(),list);
+//        listView.setAdapter(adapter);
         return rootView;
     }
 
