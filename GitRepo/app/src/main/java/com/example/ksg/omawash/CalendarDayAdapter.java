@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +27,12 @@ public class CalendarDayAdapter extends PagerAdapter {
 //    LinearLayout view;
     View view;
     LayoutInflater inflater;
+    IDayViewPagerContainer dayViewPagerContainer;
 
-    public CalendarDayAdapter( Context c, ArrayList<ArrayList<ISlotItem>> weekList){
+    public CalendarDayAdapter( IDayViewPagerContainer dayViewPagerContainer , Context c, ArrayList<ArrayList<ISlotItem>> weekList){
         this.weekList = weekList;
         this.context = c;
+        this.dayViewPagerContainer = dayViewPagerContainer;
         inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
@@ -60,7 +61,7 @@ public class CalendarDayAdapter extends PagerAdapter {
 
         TextView dateTitle = (TextView) view.findViewById(R.id.dateTitle);
         ListView listView = (ListView) view.findViewById(R.id.listViewDay);
-        listView.setFocusable(true);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -68,16 +69,9 @@ public class CalendarDayAdapter extends PagerAdapter {
 
                 ISlotItem item = (ISlotItem) adapterView.getItemAtPosition(i);
                 Log.e("ListViewAdapter","Date : " + item.getDate() + " Time: " + item.getTime());
-
+                dayViewPagerContainer.onDayCalendarItemClicked(item);
             }
         });
-
-//
-//        LinearLayout layout = new LinearLayout(context);
-//        layout.setOrientation(LinearLayout.VERTICAL);
-//        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
-
 
         dateTitle.setText(weekList.get(position).get(0).getDateTitle());
         dateTitle.setTextColor(context.getResources().getColor(R.color.primary_dark_material_light));
@@ -91,4 +85,9 @@ public class CalendarDayAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((LinearLayout)object);
     }
+
+    public interface IDayViewPagerContainer{
+        void onDayCalendarItemClicked( ISlotItem item );
+    }
+
 }

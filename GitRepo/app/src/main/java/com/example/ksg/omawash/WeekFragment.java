@@ -14,14 +14,6 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link WeekFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link WeekFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WeekFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,8 +26,8 @@ public class WeekFragment extends Fragment {
     private String mParam1 = "";
     private int sectionNumber;
     private ArrayList<ArrayList<ISlotItem>> list;
+    private ISlotReserver slotReserver;
 
-    private OnFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -102,9 +94,11 @@ public class WeekFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 ISlotItem item = (ISlotItem) adapterView.getItemAtPosition(position);
-                if(item != null)
+                if(item != null){
+                    slotReserver.onISlotItemRequested(item);
                     Log.i("WeekCalendar","Date :" + item.getDate() + " Time :" + item.getTime());
-                else Log.i("WeekCalendar"," == null");
+
+                } else Log.i("WeekCalendar"," == null");
 
             }
         });
@@ -112,11 +106,11 @@ public class WeekFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction(uri);
+//        }
+//    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -124,7 +118,7 @@ public class WeekFragment extends Fragment {
         try {
             ((LoginFragment.IMenuBarTitle) activity)
                     .changeMenuBarTitle(getArguments().getInt(ARG_SECTION));
-//            mListener = (OnFragmentInteractionListener) activity;
+            slotReserver = (ISlotReserver) activity;
 
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
@@ -135,22 +129,7 @@ public class WeekFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        slotReserver = null;
     }
 
 }

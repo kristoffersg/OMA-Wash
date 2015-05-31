@@ -20,15 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DayFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DayFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class DayFragment extends Fragment{
+
+public class DayFragment extends Fragment implements CalendarDayAdapter.IDayViewPagerContainer{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,11 +32,7 @@ public class DayFragment extends Fragment{
     private String mParam1;
     private ArrayList<ArrayList<ISlotItem>> list;
 
-
-    SimpleDateFormat dateTitleFormat;
-
-
-    private OnFragmentInteractionListener mListener;
+    private ISlotReserver slotReserver;
 
     /**
      * Use this factory method to create a new instance of
@@ -98,14 +87,7 @@ public class DayFragment extends Fragment{
 
         ViewPager pager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
-        pager.setAdapter(new CalendarDayAdapter(getActivity().getApplicationContext(),list));
-
-        pager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("ViewPager", "Click" );
-            }
-        });
+        pager.setAdapter(new CalendarDayAdapter(this, getActivity().getApplicationContext(), list));
 
 //        ListView listView;
 //        String date = list.get(0).get(0).getDateTitle();
@@ -124,9 +106,9 @@ public class DayFragment extends Fragment{
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction(uri);
+//        }
     }
 
     @Override
@@ -136,6 +118,7 @@ public class DayFragment extends Fragment{
 //            mListener = (OnFragmentInteractionListener) activity;
             ((LoginFragment.IMenuBarTitle) activity)
                     .changeMenuBarTitle(getArguments().getInt(ARG_SECTION));
+            slotReserver = (ISlotReserver) activity;
 
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
@@ -146,9 +129,13 @@ public class DayFragment extends Fragment{
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        slotReserver = null;
     }
 
+    @Override
+    public void onDayCalendarItemClicked(ISlotItem item) {
+        slotReserver.onISlotItemRequested(item);
+    }
 
 
     /**
@@ -161,9 +148,6 @@ public class DayFragment extends Fragment{
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
+
 
 }

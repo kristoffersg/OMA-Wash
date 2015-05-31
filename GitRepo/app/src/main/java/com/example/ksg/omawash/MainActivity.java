@@ -34,7 +34,8 @@ import com.parse.ParseUser;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, LoginFragment.ILoginFragment, LoginFragment.IMenuBarTitle{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        LoginFragment.ILoginFragment, LoginFragment.IMenuBarTitle,ISlotReserver{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -96,8 +97,12 @@ public class MainActivity extends ActionBarActivity
 
     public void onButtonPressed(View view) {
         createParseUser();
-    }
+ 	}
 
+    @Override
+    public void onISlotItemRequested(ISlotItem item) {
+        Log.e("SlotReserver","Slot Time: " + item.getTime() + " Date: " +item.getDate());
+    }
 
     // Enum to keep track of the device orientation + field
     public enum PhoneMode {PORTRAIT, LANDSCAPE}
@@ -152,17 +157,6 @@ public class MainActivity extends ActionBarActivity
             phoneMode = PhoneMode.LANDSCAPE;
         } else phoneMode = PhoneMode.PORTRAIT;
 
-//        if (phoneMode == PhoneMode.PORTRAIT){ // If portrait use DayFragment
-//
-//            getFragmentManager().beginTransaction()
-//                    .replace(R.id.container, DayFragment.newInstance(itemArrayList))
-//                    .commit();
-//
-//        } else { // Else use landscape
-//            getFragmentManager().beginTransaction()
-//                    .replace(R.id.container, WeekFragment.newInstance(itemArrayList))
-//                    .commit();
-//        }
     }
 
 
