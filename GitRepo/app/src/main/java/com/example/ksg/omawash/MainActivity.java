@@ -130,8 +130,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onISlotItemRequested(ISlotItem item) {
         Log.i("SlotReserver", "Slot Time: " + item.getTime() + " Date: " + item.getDate());
-        loggedIn = true; // Test
-
 
         if( ParseUser.getCurrentUser() != null )
         {
@@ -168,7 +166,6 @@ public class MainActivity extends ActionBarActivity
                             } else {
                                 Log.i("Parse Object", "Time taken!");
                                 Toast.makeText(getApplicationContext(), "Error: Time taken! Sorry...", Toast.LENGTH_SHORT).show();
-
                             }
                         }
 
@@ -192,11 +189,14 @@ public class MainActivity extends ActionBarActivity
             public void done(ParseUser parseUser, ParseException e) {
                 if (parseUser == null) {
                     Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+                    onNavigationDrawerItemSelected(0);
                 } else if (parseUser.isNew()) {
                     Log.d("MyApp", "User signed up and logged in through Facebook!");
+                    mNavigationDrawerFragment.changeLogInStatus(true);
                     onNavigationDrawerItemSelected(0);
                 } else {
                     Log.d("MyApp", "User logged in through Facebook!");
+                    mNavigationDrawerFragment.changeLogInStatus(true);
                     onNavigationDrawerItemSelected(0);
 
                 }
@@ -257,10 +257,38 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 3:
-                loginFragment = LoginFragment.newInstance(position +1);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, loginFragment)
-                        .commit();
+
+//                ParseUser.getCurrentUser().logOut();
+                if (ParseUser.getCurrentUser() != null ) {
+                    Log.i("loglog", " Log in logging out");
+                    Toast.makeText(this, "Logged out", Toast.LENGTH_LONG);
+                    mNavigationDrawerFragment.changeLogInStatus(false);
+////                    mNavigationDrawerFragment.changeLogInStatus(true);
+                    ParseUser.getCurrentUser().logOut();
+                    Log.i("loglog", "Just logged out");
+
+                    if( ParseUser.getCurrentUser() == null )
+                    {
+                        mNavigationDrawerFragment.changeLogInStatus(false);
+                    }
+                } else
+                {
+                    loginFragment = LoginFragment.newInstance(position +1);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, loginFragment)
+                            .commit();
+//                    mNavigationDrawerFragment.changeLogInStatus(false);
+                    Log.i("loglog", "Logged out, about to log in");
+
+                    createParseUser(); // Loges on if already created
+                    if( ParseUser.getCurrentUser() != null )
+                    {
+                        Log.i("loglog", "Just logged in, about to change menu text'");
+                        mNavigationDrawerFragment.changeLogInStatus(true);
+
+                    } else Log.i("loglog", "didn't change menu text");
+
+                }
                 break;
         }
 

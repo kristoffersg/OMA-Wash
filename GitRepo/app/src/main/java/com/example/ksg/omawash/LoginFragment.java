@@ -17,10 +17,6 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-
-import java.util.ArrayList;
-
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -101,7 +97,6 @@ public class LoginFragment extends Fragment {
                 mListener.onLoginError();
             }
         });
-
 
         return rootView;
     }

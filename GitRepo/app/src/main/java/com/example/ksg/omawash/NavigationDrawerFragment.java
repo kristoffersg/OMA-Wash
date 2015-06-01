@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,9 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.parse.ParseUser;
+
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -78,7 +80,7 @@ public class NavigationDrawerFragment extends Fragment {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
-
+        mCallbacks.initNavigationItems();
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
     }
@@ -102,20 +104,19 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        String log = changeLogInStatus(loggedIn);
+        if (ParseUser.getCurrentUser() == null)     // Logged out
+        {
+            loggedIn = false;
+            changeLogInStatus(loggedIn);
+        }
+        else  {                                     // Logged out
 
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                        log,
+            loggedIn = true;
+            changeLogInStatus(loggedIn);
 
-                }));
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        }
+
+//        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }
 
@@ -206,9 +207,10 @@ public class NavigationDrawerFragment extends Fragment {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
-            mCallbacks.initNavigationItems();
+//            mCallbacks.initNavigationItems();
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
+
     }
 
     @Override
@@ -286,16 +288,34 @@ public class NavigationDrawerFragment extends Fragment {
         void initNavigationItems();
     }
 
-    public String changeLogInStatus(boolean loggedInStatus)
+    public void changeLogInStatus(boolean loggedIn)
     {
-        loggedIn = loggedInStatus;
         String str;
-        if (loggedInStatus){
+        if (loggedIn){
+            // If logged in you can log out
             str = getString(R.string.title_section5);
+            Log.i("loglog", " Logging in, changing menu text to: " + str);
+
+
         }
         else{
+            // If logged out you can log in
             str= getString(R.string.title_section4);
+            Log.i("loglog", " Logging out, changing menu text to: " + str);
+
         }
-        return str;
+        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+                getActionBar().getThemedContext(),
+                android.R.layout.simple_list_item_activated_1,
+                android.R.id.text1,
+                new String[]{
+                        getString(R.string.title_section1),
+                        getString(R.string.title_section2),
+                        getString(R.string.title_section3),
+                        str,
+
+                }));
+        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
     }
 }

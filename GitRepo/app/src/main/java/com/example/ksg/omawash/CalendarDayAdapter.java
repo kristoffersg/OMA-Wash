@@ -68,7 +68,7 @@ public class CalendarDayAdapter extends PagerAdapter {
                 // TODO: Pass the item on
 
                 ISlotItem item = (ISlotItem) adapterView.getItemAtPosition(i);
-                Log.e("ListViewAdapter","Date : " + item.getDate() + " Time: " + item.getTime());
+                Log.i("ListViewAdapter","Date : " + item.getDate() + " Time: " + item.getTime());
                 dayViewPagerContainer.onDayCalendarItemClicked(item);
             }
         });
