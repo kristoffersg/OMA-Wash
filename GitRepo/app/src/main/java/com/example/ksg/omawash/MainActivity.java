@@ -101,6 +101,8 @@ public class MainActivity extends ActionBarActivity
         onNavigationDrawerItemSelected(0);
         mNavigationDrawerFragment.changeLogInStatus(true);
         createParseUser();
+        loggedIn = true;
+        mNavigationDrawerFragment.changeLogInStatus(loggedIn);
     }
 
     // TODO: Check what should be done, if log in is canceled, maybe change the current fragment
@@ -123,7 +125,7 @@ public class MainActivity extends ActionBarActivity
 
     public void onButtonPressed(View view) {
         createParseUser();
-    }
+ 	}
 
     @Override
     public void onISlotItemRequested(ISlotItem item) {
@@ -177,6 +179,7 @@ public class MainActivity extends ActionBarActivity
 
         } else onNavigationDrawerItemSelected(3);
     }
+
 
     public void createParseUser(){
 
@@ -283,8 +286,37 @@ public class MainActivity extends ActionBarActivity
 
         updateFragmentState(getResources().getConfiguration());
 
-        slotItemList    = timeSlotFac.getTimeSlotItemList((Calendar)start.clone(),24,(Calendar)length.clone());
+        slotItemList    = timeSlotFac.getTimeSlotItemList((Calendar) start.clone(), 24, (Calendar) length.clone());
         weekList        = timeSlotFac.getWeekList((Calendar) start.clone(), 24, (Calendar) length.clone());
+
+//        ISlotItem item;
+//        String weekday = "EEEE";
+//        String hourOfDay = "HH:mm";
+//        String day;
+//        String hour;
+//
+//        for (int i=0; i < 7; i++){
+//            for (int k = 0; k < 24; k++){
+//                item = weekList.get(i).get(k);
+//                formatter = new SimpleDateFormat(weekday);
+//                day = formatter.format(item.getStartCalendar().getTime());
+//                formatter = new SimpleDateFormat(hourOfDay);
+//                hour = formatter.format(item.getStartCalendar().getTime());
+//
+//                ParseObject bookings = new ParseObject("Bookings");
+//                bookings.put("Weekday", day);
+//                bookings.put("StartTime", hour);
+//                bookings.saveInBackground();
+//                try {
+//                    wait(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                    Log.e("Fejl","fejl");
+//                }
+//
+//
+//            }
+//        }
 
     }
 

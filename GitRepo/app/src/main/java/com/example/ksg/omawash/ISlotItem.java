@@ -28,8 +28,6 @@ public interface ISlotItem {
     void setReserver(int room);
 
     void setDateFormat(String dateFormat);
-
+    
     Calendar getStartCalendar();
-
-
 }
