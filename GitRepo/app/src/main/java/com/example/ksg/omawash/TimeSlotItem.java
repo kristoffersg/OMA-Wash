@@ -80,4 +80,9 @@ public class TimeSlotItem implements ISlotItem {
     public void setDateFormat(String dateFormat){
         this.dateFormat = new SimpleDateFormat(dateFormat);
     }
+
+    @Override
+    public Calendar getStartCalendar() {
+        return (Calendar) slotStartTime.clone();
+    }
 }

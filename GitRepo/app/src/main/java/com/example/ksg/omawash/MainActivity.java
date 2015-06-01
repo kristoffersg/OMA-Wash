@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,13 +25,16 @@ import java.util.Calendar;
 import java.util.List;
 
 import com.facebook.FacebookSdk;
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 
 public class MainActivity extends ActionBarActivity
@@ -45,9 +49,15 @@ public class MainActivity extends ActionBarActivity
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
+
     private CharSequence mTitle;
     //Change if logged in or not
     private boolean loggedIn = false;
+
+
+    // Enum to keep track of the device orientation + field
+    public enum PhoneMode {PORTRAIT, LANDSCAPE}
+    private PhoneMode phoneMode;
 
 
 
@@ -66,14 +76,30 @@ public class MainActivity extends ActionBarActivity
     ArrayList<ArrayList<ISlotItem>> weekList;
     LoginFragment loginFragment;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        // Enable Local Datastore.
+        Parse.initialize(this, getString(R.string.application_id), getString(R.string.client_key));
+        ParseFacebookUtils.initialize(this);
+        setContentView(R.layout.activity_main);
 
+        // Generated
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
 
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout), loggedIn);
+
+    }
 
     @Override
     public void onLoginSucces() {
         onNavigationDrawerItemSelected(0);
-        loggedIn = true;
-        mNavigationDrawerFragment.changeLogInStatus(loggedIn);
+        mNavigationDrawerFragment.changeLogInStatus(true);
         createParseUser();
     }
 
@@ -97,37 +123,59 @@ public class MainActivity extends ActionBarActivity
 
     public void onButtonPressed(View view) {
         createParseUser();
- 	}
+    }
 
     @Override
     public void onISlotItemRequested(ISlotItem item) {
-        Log.e("SlotReserver","Slot Time: " + item.getTime() + " Date: " +item.getDate());
-    }
+        Log.i("SlotReserver", "Slot Time: " + item.getTime() + " Date: " + item.getDate());
+        loggedIn = true; // Test
 
-    // Enum to keep track of the device orientation + field
-    public enum PhoneMode {PORTRAIT, LANDSCAPE}
-    private PhoneMode phoneMode;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        // Enable Local Datastore.
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, getString(R.string.application_id), getString(R.string.client_key));
-        ParseFacebookUtils.initialize(this);
+        if( ParseUser.getCurrentUser() != null )
+        {
+            formatter = new SimpleDateFormat("EEEE");
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("TimeSlots");
+            query.whereEqualTo("day",formatter.format(item.getStartCalendar().getTime()));
+            formatter = new SimpleDateFormat(("HH:mm"));
+            query.whereEqualTo("startTime", formatter.format(item.getStartCalendar().getTime()));
 
-        setContentView(R.layout.activity_main);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if ( e == null) {
 
-        // Generated
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+                        for (ParseObject slot : list) {
+                            if (slot.get("room") == null) {
+                                    // Only if
+                                    slot.put("room",ParseUser.getCurrentUser().get("room"));
+                                    slot.put("reserver", ParseObject
+                                            .createWithoutData("_User", ParseUser.getCurrentUser().getObjectId()));
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout),loggedIn);
+                                    Log.e("Parse .object", "The time:" + slot.get("startTime"));
 
+                                    slot.saveEventually(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null)
+                                            {
+                                                Log.i("Parse Object", " Saved");
+
+                                            } else Log.e("Parse Object", "Error " + e.toString());
+                                        }
+                                    });
+                            } else {
+                                Log.i("Parse Object", "Time taken!");
+                                Toast.makeText(getApplicationContext(), "Error: Time taken! Sorry...", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+
+                    } else Log.e("Parse","couldn't list timeSlots" + e.toString());
+
+                }
+            });
+
+        } else onNavigationDrawerItemSelected(3);
     }
 
     public void createParseUser(){
@@ -143,8 +191,11 @@ public class MainActivity extends ActionBarActivity
                     Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
                 } else if (parseUser.isNew()) {
                     Log.d("MyApp", "User signed up and logged in through Facebook!");
+                    onNavigationDrawerItemSelected(0);
                 } else {
                     Log.d("MyApp", "User logged in through Facebook!");
+                    onNavigationDrawerItemSelected(0);
+
                 }
             }
         });

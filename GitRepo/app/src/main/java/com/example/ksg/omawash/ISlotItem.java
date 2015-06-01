@@ -29,5 +29,7 @@ public interface ISlotItem {
 
     void setDateFormat(String dateFormat);
 
+    Calendar getStartCalendar();
+
 
 }
