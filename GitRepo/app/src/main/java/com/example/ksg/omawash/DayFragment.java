@@ -133,8 +133,8 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
     }
 
     @Override
-    public void onDayCalendarItemClicked(ISlotItem item) {
-        slotReserver.onISlotItemRequested(item);
+    public void onDayCalendarItemClicked(ISlotItem item, int dayPos, int timePos) {
+        slotReserver.onISlotItemRequested(item, dayPos, timePos);
     }
 
 

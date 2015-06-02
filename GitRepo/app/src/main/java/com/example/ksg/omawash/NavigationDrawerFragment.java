@@ -62,7 +62,7 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
 
     // Login status
-    private boolean loggedIn = false;
+    private boolean loggedIn;
 
     public NavigationDrawerFragment() {
     }
@@ -107,12 +107,12 @@ public class NavigationDrawerFragment extends Fragment {
         if (ParseUser.getCurrentUser() == null)     // Logged out
         {
             loggedIn = false;
-            changeLogInStatus(loggedIn);
+            changeLogInStatus(loggedIn,mCurrentSelectedPosition);
         }
         else  {                                     // Logged out
 
             loggedIn = true;
-            changeLogInStatus(loggedIn);
+            changeLogInStatus(loggedIn,mCurrentSelectedPosition);
 
         }
 
@@ -288,7 +288,7 @@ public class NavigationDrawerFragment extends Fragment {
         void initNavigationItems();
     }
 
-    public void changeLogInStatus(boolean loggedIn)
+    public void changeLogInStatus(boolean loggedIn, int position)
     {
         String str;
         if (loggedIn){
@@ -315,7 +315,8 @@ public class NavigationDrawerFragment extends Fragment {
                         str,
 
                 }));
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        selectItem(position);
+//        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
     }
 }

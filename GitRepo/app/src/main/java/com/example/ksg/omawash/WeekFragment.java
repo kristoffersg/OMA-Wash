@@ -93,9 +93,11 @@ public class WeekFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                int time    = position / 8 -1;
+                int day     = position % 8 -1;
                 ISlotItem item = (ISlotItem) adapterView.getItemAtPosition(position);
                 if(item != null){
-                    slotReserver.onISlotItemRequested(item);
+                    slotReserver.onISlotItemRequested(item, day, time);
                     Log.i("WeekCalendar","Date :" + item.getDate() + " Time :" + item.getTime());
 
                 } else Log.i("WeekCalendar"," == null");

@@ -53,12 +53,12 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+//        if (getArguments() != null) {
 //            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+//        }
+//        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
 
-        callbackManager = CallbackManager.Factory.create();
+//        callbackManager = CallbackManager.Factory.create();
 
 
     }
@@ -72,31 +72,31 @@ public class LoginFragment extends Fragment {
 
         //Facebook login button
         //View view = inflater.inflate(R.layout.splash, container, false);
-
-        loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
-        loginButton.setReadPermissions("user_friends");
+//
+//        loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
+//        loginButton.setReadPermissions("user_friends");
 
         // If using in a fragment
 //        loginButton.setFragment(this);
         // Other app specific specialization
 
         // Callback registration
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                mListener.onLoginSucces();
-            }
-
-            @Override
-            public void onCancel() {
-                mListener.onLoginCancel();
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                mListener.onLoginError();
-            }
-        });
+//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                mListener.onLoginSucces();
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                mListener.onLoginCancel();
+//            }
+//
+//            @Override
+//            public void onError(FacebookException exception) {
+//                mListener.onLoginError();
+//            }
+//        });
 
         return rootView;
     }

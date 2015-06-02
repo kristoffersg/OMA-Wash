@@ -21,8 +21,12 @@ import java.util.List;
 public class CalendarDayAdapter extends PagerAdapter {
 
     int daysInCalendar = 7;
-    LinearLayout dayView = null;
+
     private ArrayList<ArrayList<ISlotItem>> weekList;
+    public void setWeekList(ArrayList<ArrayList<ISlotItem>> weekList) {
+        this.weekList = weekList;
+    }
+
     private Context context;
 //    LinearLayout view;
     View view;
@@ -69,7 +73,11 @@ public class CalendarDayAdapter extends PagerAdapter {
 
                 ISlotItem item = (ISlotItem) adapterView.getItemAtPosition(i);
                 Log.i("ListViewAdapter","Date : " + item.getDate() + " Time: " + item.getTime());
-                dayViewPagerContainer.onDayCalendarItemClicked(item);
+                dayViewPagerContainer.onDayCalendarItemClicked( item, position, i);
+//                Log.e("CalendarAdapter", "Item: " + item.getReserver());
+//                weekList.get(position).set(i, item);
+//                Log.e("CalendarAdapter", "Item in weekList: " + weekList.get(position).get(i));
+
             }
         });
 
@@ -87,7 +95,7 @@ public class CalendarDayAdapter extends PagerAdapter {
     }
 
     public interface IDayViewPagerContainer{
-        void onDayCalendarItemClicked( ISlotItem item );
+        void onDayCalendarItemClicked( ISlotItem item, int dayPos, int timePos );
     }
 
 }

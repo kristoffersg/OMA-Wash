@@ -98,11 +98,11 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onLoginSucces() {
-        onNavigationDrawerItemSelected(0);
-        mNavigationDrawerFragment.changeLogInStatus(true);
-        createParseUser();
-        loggedIn = true;
-        mNavigationDrawerFragment.changeLogInStatus(loggedIn);
+//        onNavigationDrawerItemSelected(0);
+//        mNavigationDrawerFragment.changeLogInStatus(true);
+//        createParseUser();
+//        loggedIn = true;
+//        mNavigationDrawerFragment.changeLogInStatus(loggedIn);
     }
 
     // TODO: Check what should be done, if log in is canceled, maybe change the current fragment
@@ -128,7 +128,7 @@ public class MainActivity extends ActionBarActivity
  	}
 
     @Override
-    public void onISlotItemRequested(ISlotItem item) {
+    public void onISlotItemRequested(final ISlotItem item, int dayPos, int timePos) {
         Log.i("SlotReserver", "Slot Time: " + item.getTime() + " Date: " + item.getDate());
 
         if( ParseUser.getCurrentUser() != null )
@@ -143,26 +143,33 @@ public class MainActivity extends ActionBarActivity
                 @Override
                 public void done(List<ParseObject> list, ParseException e) {
                     if ( e == null) {
-
                         for (ParseObject slot : list) {
-                            if (slot.get("room") == null) {
-                                    // Only if
-                                    slot.put("room",ParseUser.getCurrentUser().get("room"));
-                                    slot.put("reserver", ParseObject
-                                            .createWithoutData("_User", ParseUser.getCurrentUser().getObjectId()));
+                            if (slot.get("room") == null) { // Only if room is not stated
+                                slot.put("room",ParseUser.getCurrentUser().get("room"));
+                                slot.put("reserver", ParseObject
+                                        .createWithoutData("_User", ParseUser.getCurrentUser().getObjectId()));
 
-                                    Log.e("Parse .object", "The time:" + slot.get("startTime"));
+                                Log.e("Parse Object", "The time:" + slot.get("startTime"));
 
-                                    slot.saveEventually(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e == null)
-                                            {
-                                                Log.i("Parse Object", " Saved");
-
-                                            } else Log.e("Parse Object", "Error " + e.toString());
+                                slot.saveEventually(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if (e == null)
+                                        {
+                                            Log.i("Parse Object", " Saved");
+                                            Toast.makeText(getApplicationContext(), "Reservation at "
+                                                    + item.getDate() + ", "+item.getTime()+" has been saved"
+                                                    , Toast.LENGTH_LONG).show();
+                                            SavedInCloud(true);
+                                        } else {
+                                            Log.e("Parse Object", "Error " + e.toString());
+                                            SavedInCloud(false);
                                         }
-                                    });
+                                    }
+                                });
+                                if (saved)
+                                    item.setReserver(slot.getInt("room"));
+
                             } else {
                                 Log.i("Parse Object", "Time taken!");
                                 Toast.makeText(getApplicationContext(), "Error: Time taken! Sorry...", Toast.LENGTH_SHORT).show();
@@ -177,6 +184,10 @@ public class MainActivity extends ActionBarActivity
         } else onNavigationDrawerItemSelected(3);
     }
 
+    private boolean saved = false;
+    public void SavedInCloud(boolean saved){
+        this.saved = saved;
+    }
 
     public void createParseUser(){
 
@@ -189,15 +200,15 @@ public class MainActivity extends ActionBarActivity
             public void done(ParseUser parseUser, ParseException e) {
                 if (parseUser == null) {
                     Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
-                    onNavigationDrawerItemSelected(0);
+                    mNavigationDrawerFragment.changeLogInStatus(true, 0);
                 } else if (parseUser.isNew()) {
                     Log.d("MyApp", "User signed up and logged in through Facebook!");
-                    mNavigationDrawerFragment.changeLogInStatus(true);
-                    onNavigationDrawerItemSelected(0);
+                    mNavigationDrawerFragment.changeLogInStatus(true,0);
+//                    onNavigationDrawerItemSelected(0);
                 } else {
                     Log.d("MyApp", "User logged in through Facebook!");
-                    mNavigationDrawerFragment.changeLogInStatus(true);
-                    onNavigationDrawerItemSelected(0);
+                    mNavigationDrawerFragment.changeLogInStatus(true,0);
+//                    onNavigationDrawerItemSelected(0);
 
                 }
             }
@@ -262,14 +273,14 @@ public class MainActivity extends ActionBarActivity
                 if (ParseUser.getCurrentUser() != null ) {
                     Log.i("loglog", " Log in logging out");
                     Toast.makeText(this, "Logged out", Toast.LENGTH_LONG);
-                    mNavigationDrawerFragment.changeLogInStatus(false);
+                    mNavigationDrawerFragment.changeLogInStatus(false,0);
 ////                    mNavigationDrawerFragment.changeLogInStatus(true);
                     ParseUser.getCurrentUser().logOut();
                     Log.i("loglog", "Just logged out");
 
                     if( ParseUser.getCurrentUser() == null )
                     {
-                        mNavigationDrawerFragment.changeLogInStatus(false);
+                        mNavigationDrawerFragment.changeLogInStatus(false,0);
                     }
                 } else
                 {
@@ -284,7 +295,7 @@ public class MainActivity extends ActionBarActivity
                     if( ParseUser.getCurrentUser() != null )
                     {
                         Log.i("loglog", "Just logged in, about to change menu text'");
-                        mNavigationDrawerFragment.changeLogInStatus(true);
+                        mNavigationDrawerFragment.changeLogInStatus(true,0);
 
                     } else Log.i("loglog", "didn't change menu text");
 
