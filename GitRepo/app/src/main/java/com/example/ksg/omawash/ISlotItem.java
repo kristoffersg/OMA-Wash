@@ -7,7 +7,7 @@ import java.util.Calendar;
 /**
  * Created by lassebuesvendsen on 29/05/15.
  */
-public interface ISlotItem {
+public interface ISlotItem{
     String getTime();
 
     String getDateTitle();

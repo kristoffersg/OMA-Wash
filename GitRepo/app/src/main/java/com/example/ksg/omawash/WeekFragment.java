@@ -2,8 +2,13 @@ package com.example.ksg.omawash;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +32,7 @@ public class WeekFragment extends Fragment {
     private int sectionNumber;
     private ArrayList<ArrayList<ISlotItem>> list;
     private ISlotReserver slotReserver;
+    private WeekGridAdapter weekAdapter;
 
 
     /**
@@ -51,6 +57,7 @@ public class WeekFragment extends Fragment {
         return fragment;
     }
     public static WeekFragment newInstance( int sectionNumber , ArrayList<ArrayList<ISlotItem>> list) {
+        Log.e("WeekFragment","newInstance");
         WeekFragment fragment = new WeekFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, ""); // should not be here
@@ -70,19 +77,25 @@ public class WeekFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             list    = (ArrayList<ArrayList<ISlotItem>>) getArguments().getSerializable(ARG_LIST);
-
         }
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(onBookingReceiver, new IntentFilter("OnISlotItemChanged"));
+        Log.e("WeekFragment","onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e("WeekFragment","onCreateView");
+
+
         View rootView = inflater.inflate(R.layout.week_fragment, container, false);
         GridView gridView;
 
         gridView = (GridView) rootView.findViewById(R.id.gridView);
-        WeekGridAdapter adapter = new WeekGridAdapter(getActivity().getApplicationContext(),list);
-        gridView.setAdapter(adapter);
+        weekAdapter = new WeekGridAdapter(getActivity().getApplicationContext(),list);
+
+        gridView.setAdapter(weekAdapter);
+
         LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams)gridView.getLayoutParams();
         linearParams.width=225*8;
         gridView.setLayoutParams(linearParams);
@@ -113,6 +126,28 @@ public class WeekFragment extends Fragment {
 //            mListener.onFragmentInteraction(uri);
 //        }
 //    }
+
+    private BroadcastReceiver onBookingReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("WeekFragment","Broadcast Received");
+
+            int dayPos = intent.getIntExtra("daypos",-1);
+            int timePos = intent.getIntExtra("timepos",-1);
+
+            if(dayPos != -1){
+                try {
+                    ISlotItem item = (ISlotItem) intent.getSerializableExtra("item");
+                    Log.e("WeekFragment Received","dayPos: "+dayPos+" timePos: "
+                            +timePos+" Room : " + item.getReserver());
+                    weekAdapter.notifyDataSetChanged();
+                } catch (ClassCastException e) {
+                    throw new ClassCastException("Problem with cast to ISlotItem");
+                }
+
+            }
+        }
+    };
 
     @Override
     public void onAttach(Activity activity) {

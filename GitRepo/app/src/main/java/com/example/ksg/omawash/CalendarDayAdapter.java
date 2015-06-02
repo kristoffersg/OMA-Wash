@@ -23,10 +23,7 @@ public class CalendarDayAdapter extends PagerAdapter {
     int daysInCalendar = 7;
 
     private ArrayList<ArrayList<ISlotItem>> weekList;
-    public void setWeekList(ArrayList<ArrayList<ISlotItem>> weekList) {
-        this.weekList = weekList;
-    }
-
+    private ArrayList<ListViewTimeSlotsAdapter> listViewAdapters;
     private Context context;
 //    LinearLayout view;
     View view;
@@ -37,6 +34,7 @@ public class CalendarDayAdapter extends PagerAdapter {
         this.weekList = weekList;
         this.context = c;
         this.dayViewPagerContainer = dayViewPagerContainer;
+        this.listViewAdapters = new ArrayList<>();
         inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
@@ -48,9 +46,16 @@ public class CalendarDayAdapter extends PagerAdapter {
     }
 
 
+    public void updateCalendarView(ArrayList<ArrayList<ISlotItem>> list,int dayPos) {
+        this.weekList = list;
+        listViewAdapters.get(dayPos).notifyDataSetChanged();
+//        this.notifyDataSetChanged();
+    }
+
+
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == ( (LinearLayout) object );
+        return view == ( object );
     }
 
     @Override
@@ -72,18 +77,16 @@ public class CalendarDayAdapter extends PagerAdapter {
                 // TODO: Pass the item on
 
                 ISlotItem item = (ISlotItem) adapterView.getItemAtPosition(i);
-                Log.i("ListViewAdapter","Date : " + item.getDate() + " Time: " + item.getTime());
-                dayViewPagerContainer.onDayCalendarItemClicked( item, position, i);
-//                Log.e("CalendarAdapter", "Item: " + item.getReserver());
-//                weekList.get(position).set(i, item);
-//                Log.e("CalendarAdapter", "Item in weekList: " + weekList.get(position).get(i));
-
+                Log.i("ListViewAdapter", "Date : " + item.getDate() + " Time: " + item.getTime());
+                dayViewPagerContainer.onDayCalendarItemClicked(item, position, i);
             }
         });
 
         dateTitle.setText(weekList.get(position).get(0).getDateTitle());
         dateTitle.setTextColor(context.getResources().getColor(R.color.primary_dark_material_light));
-        listView.setAdapter(new ListViewTimeSlotsAdapter(context, weekList.get(position)));
+
+        listViewAdapters.add(new ListViewTimeSlotsAdapter(context, weekList.get(position)));
+        listView.setAdapter(listViewAdapters.get(position));
 
         container.addView(view);
         return view;

@@ -1,5 +1,6 @@
 package com.example.ksg.omawash;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -7,7 +8,7 @@ import java.util.Calendar;
 /**
  * Created by lassebuesvendsen on 22/04/15.
  */
-public class TimeSlotItem implements ISlotItem {
+public class TimeSlotItem implements ISlotItem, Serializable{
 
     String strDateFormat;
     Calendar slotStartTime;

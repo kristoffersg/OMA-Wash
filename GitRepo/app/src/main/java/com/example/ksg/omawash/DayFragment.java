@@ -4,9 +4,14 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -30,9 +35,10 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-    private ArrayList<ArrayList<ISlotItem>> list;
+    private ArrayList<ArrayList<ISlotItem>> weekList;
 
     private ISlotReserver slotReserver;
+    private CalendarDayAdapter pagerAdapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -73,8 +79,10 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            list = (ArrayList<ArrayList<ISlotItem>>) getArguments().getSerializable(ARG_LIST);
+            weekList = (ArrayList<ArrayList<ISlotItem>>) getArguments().getSerializable(ARG_LIST);
         }
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(onBookingReceiver, new IntentFilter("OnISlotItemChanged"));
+
     }
 
 
@@ -87,7 +95,8 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
 
         ViewPager pager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
-        pager.setAdapter(new CalendarDayAdapter(this, getActivity().getApplicationContext(), list));
+        pagerAdapter = new CalendarDayAdapter(this, getActivity().getApplicationContext(), weekList);
+        pager.setAdapter(pagerAdapter);
 
 //        ListView listView;
 //        String date = list.get(0).get(0).getDateTitle();
@@ -137,6 +146,29 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
         slotReserver.onISlotItemRequested(item, dayPos, timePos);
     }
 
+    private BroadcastReceiver onBookingReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("DayFragment","Broadcast Received");
+
+            int dayPos = intent.getIntExtra("daypos",-1);
+            int timePos = intent.getIntExtra("timepos",-1);
+
+            if(dayPos != -1){
+                try {
+                    ISlotItem item = (ISlotItem) intent.getSerializableExtra("item");
+                    Log.e("DayFragment Received", "dayPos: " + dayPos + " timePos: "
+                            + timePos + " Room : " + item.getReserver());
+                    weekList.get(dayPos).set(timePos, item);
+                    pagerAdapter.updateCalendarView(weekList,dayPos);
+
+                } catch (ClassCastException e) {
+                    throw new ClassCastException("Problem with cast to ISlotItem");
+                }
+
+            }
+        }
+    };
 
     /**
      * This interface must be implemented by activities that contain this

@@ -82,7 +82,9 @@ public class NavigationDrawerFragment extends Fragment {
         }
         mCallbacks.initNavigationItems();
         // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedPosition);
+
+//        TODO: Skal måske med?
+        //selectItem(mCurrentSelectedPosition);
     }
 
     @Override

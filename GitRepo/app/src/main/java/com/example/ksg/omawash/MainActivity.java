@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -128,7 +130,7 @@ public class MainActivity extends ActionBarActivity
  	}
 
     @Override
-    public void onISlotItemRequested(final ISlotItem item, int dayPos, int timePos) {
+    public void onISlotItemRequested(final ISlotItem item, final int dayPos, final int timePos) {
         Log.i("SlotReserver", "Slot Time: " + item.getTime() + " Date: " + item.getDate());
 
         if( ParseUser.getCurrentUser() != null )
@@ -145,7 +147,7 @@ public class MainActivity extends ActionBarActivity
                     if ( e == null) {
                         for (ParseObject slot : list) {
                             if (slot.get("room") == null) { // Only if room is not stated
-                                slot.put("room",ParseUser.getCurrentUser().get("room"));
+                                slot.put("room", ParseUser.getCurrentUser().get("room"));
                                 slot.put("reserver", ParseObject
                                         .createWithoutData("_User", ParseUser.getCurrentUser().getObjectId()));
 
@@ -154,22 +156,19 @@ public class MainActivity extends ActionBarActivity
                                 slot.saveEventually(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
-                                        if (e == null)
-                                        {
+                                        if (e == null) {
                                             Log.i("Parse Object", " Saved");
                                             Toast.makeText(getApplicationContext(), "Reservation at "
-                                                    + item.getDate() + ", "+item.getTime()+" has been saved"
+                                                    + item.getDate() + ", " + item.getTime() + " has been saved"
                                                     , Toast.LENGTH_LONG).show();
-                                            SavedInCloud(true);
+                                            item.setReserver(ParseUser.getCurrentUser().getInt("room"));
+//                                            weekList.get(dayPos).set(timePos, item);
+                                            broadcastChangedISlotItem( item, dayPos, timePos);
                                         } else {
                                             Log.e("Parse Object", "Error " + e.toString());
-                                            SavedInCloud(false);
                                         }
                                     }
                                 });
-                                if (saved)
-                                    item.setReserver(slot.getInt("room"));
-
                             } else {
                                 Log.i("Parse Object", "Time taken!");
                                 Toast.makeText(getApplicationContext(), "Error: Time taken! Sorry...", Toast.LENGTH_SHORT).show();
@@ -177,16 +176,10 @@ public class MainActivity extends ActionBarActivity
                         }
 
                     } else Log.e("Parse","couldn't list timeSlots" + e.toString());
-
                 }
             });
 
         } else onNavigationDrawerItemSelected(3);
-    }
-
-    private boolean saved = false;
-    public void SavedInCloud(boolean saved){
-        this.saved = saved;
     }
 
     public void createParseUser(){
@@ -203,11 +196,11 @@ public class MainActivity extends ActionBarActivity
                     mNavigationDrawerFragment.changeLogInStatus(true, 0);
                 } else if (parseUser.isNew()) {
                     Log.d("MyApp", "User signed up and logged in through Facebook!");
-                    mNavigationDrawerFragment.changeLogInStatus(true,0);
+                    mNavigationDrawerFragment.changeLogInStatus(true, 0);
 //                    onNavigationDrawerItemSelected(0);
                 } else {
                     Log.d("MyApp", "User logged in through Facebook!");
-                    mNavigationDrawerFragment.changeLogInStatus(true,0);
+                    mNavigationDrawerFragment.changeLogInStatus(true, 0);
 //                    onNavigationDrawerItemSelected(0);
 
                 }
@@ -413,7 +406,30 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+//    public void getBookingsInCloud(ArrayList<ArrayList<ISlotItem>> weekList)
+//    {
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("TimeSlots");
+//
+//        formatter = new SimpleDateFormat((""));
+//
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> list, ParseException e) {
+//                list.
+//            }
+//        });
+//    }
 
+    private void broadcastChangedISlotItem(ISlotItem item, int dayPos, int timePos)
+    {
+        Intent intent = new Intent("OnISlotItemChanged");
+        intent.putExtra("item", (Serializable) item);
+        intent.putExtra("daypos",dayPos);
+        intent.putExtra("timepos",timePos);
+        // Sends the Intent with the LocalBroadcastManager
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+    }
 
     /**
      * A placeholder fragment containing a simple view.
