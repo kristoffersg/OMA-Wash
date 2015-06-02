@@ -52,6 +52,14 @@ public class CalendarDayAdapter extends PagerAdapter {
 //        this.notifyDataSetChanged();
     }
 
+    public void setWeekList(ArrayList<ArrayList<ISlotItem>> weekList) {
+        this.weekList = weekList;
+        for( ListViewTimeSlotsAdapter abe : listViewAdapters )
+        {
+            abe.notifyDataSetChanged();
+        }
+
+    }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {

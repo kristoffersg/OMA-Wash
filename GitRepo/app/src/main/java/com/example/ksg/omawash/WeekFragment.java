@@ -30,7 +30,7 @@ public class WeekFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1 = "";
     private int sectionNumber;
-    private ArrayList<ArrayList<ISlotItem>> list;
+    private ArrayList<ArrayList<ISlotItem>> weekList;
     private ISlotReserver slotReserver;
     private WeekGridAdapter weekAdapter;
 
@@ -76,9 +76,11 @@ public class WeekFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            list    = (ArrayList<ArrayList<ISlotItem>>) getArguments().getSerializable(ARG_LIST);
+            weekList    = (ArrayList<ArrayList<ISlotItem>>) getArguments().getSerializable(ARG_LIST);
         }
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(onBookingReceiver, new IntentFilter("OnISlotItemChanged"));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(bookingsReceiver, new IntentFilter("bookingsReceived"));
+
         Log.e("WeekFragment","onCreate");
     }
 
@@ -92,7 +94,7 @@ public class WeekFragment extends Fragment {
         GridView gridView;
 
         gridView = (GridView) rootView.findViewById(R.id.gridView);
-        weekAdapter = new WeekGridAdapter(getActivity().getApplicationContext(),list);
+        weekAdapter = new WeekGridAdapter(getActivity().getApplicationContext(),weekList);
 
         gridView.setAdapter(weekAdapter);
 
@@ -127,6 +129,27 @@ public class WeekFragment extends Fragment {
 //        }
 //    }
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            ((LoginFragment.IMenuBarTitle) activity)
+                    .changeMenuBarTitle(getArguments().getInt(ARG_SECTION));
+            slotReserver = (ISlotReserver) activity;
+
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        slotReserver = null;
+    }
+
     private BroadcastReceiver onBookingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -149,24 +172,23 @@ public class WeekFragment extends Fragment {
         }
     };
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            ((LoginFragment.IMenuBarTitle) activity)
-                    .changeMenuBarTitle(getArguments().getInt(ARG_SECTION));
-            slotReserver = (ISlotReserver) activity;
+    private BroadcastReceiver bookingsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("DayFragment", "bookings Received");
 
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+            try {
+                Log.i("DayFragment receive B", "Try cast");
+
+                ArrayList<ArrayList<ISlotItem>> items = (ArrayList<ArrayList<ISlotItem>>) intent.getSerializableExtra("list");
+                weekList = items;
+                weekAdapter.notifyDataSetChanged();
+
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Problem with cast to ISlotItem");
+            }
+
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        slotReserver = null;
-    }
+    };
 
 }

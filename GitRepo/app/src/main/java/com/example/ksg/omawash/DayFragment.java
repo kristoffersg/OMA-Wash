@@ -81,7 +81,8 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
             mParam1 = getArguments().getString(ARG_PARAM1);
             weekList = (ArrayList<ArrayList<ISlotItem>>) getArguments().getSerializable(ARG_LIST);
         }
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(onBookingReceiver, new IntentFilter("OnISlotItemChanged"));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(onBookingChangedReceiver, new IntentFilter("OnISlotItemChanged"));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(bookingsReceiver, new IntentFilter("bookingsReceived"));
 
     }
 
@@ -146,7 +147,7 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
         slotReserver.onISlotItemRequested(item, dayPos, timePos);
     }
 
-    private BroadcastReceiver onBookingReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver onBookingChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e("DayFragment","Broadcast Received");
@@ -167,6 +168,25 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
                 }
 
             }
+        }
+    };
+
+    private BroadcastReceiver bookingsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("DayFragment", "bookings Received");
+
+            try {
+                Log.i("DayFragment receive B", "Try cast");
+
+                ArrayList<ArrayList<ISlotItem>> items = (ArrayList<ArrayList<ISlotItem>>) intent.getSerializableExtra("list");
+                weekList = items;
+                pagerAdapter.setWeekList(weekList);
+
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Problem with cast to ISlotItem");
+            }
+
         }
     };
 

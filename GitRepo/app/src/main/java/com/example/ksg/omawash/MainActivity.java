@@ -3,7 +3,10 @@ package com.example.ksg.omawash;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -82,6 +85,8 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        LocalBroadcastManager.getInstance(this).registerReceiver(bookingsReceiver, new IntentFilter("bookingsReceived"));
+
         // Enable Local Datastore.
         Parse.initialize(this, getString(R.string.application_id), getString(R.string.client_key));
         ParseFacebookUtils.initialize(this);
@@ -133,49 +138,73 @@ public class MainActivity extends ActionBarActivity
     public void onISlotItemRequested(final ISlotItem item, final int dayPos, final int timePos) {
         Log.i("SlotReserver", "Slot Time: " + item.getTime() + " Date: " + item.getDate());
 
-        if( ParseUser.getCurrentUser() != null )
+        if((ParseUser.getCurrentUser() != null && ParseUser.getCurrentUser().getInt("room") >0))
         {
             formatter = new SimpleDateFormat("EEEE");
             ParseQuery<ParseObject> query = ParseQuery.getQuery("TimeSlots");
             query.whereEqualTo("day",formatter.format(item.getStartCalendar().getTime()));
-            formatter = new SimpleDateFormat(("HH:mm"));
-            query.whereEqualTo("startTime", formatter.format(item.getStartCalendar().getTime()));
+            query.whereEqualTo("startTime", item.getTime());
 
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> list, ParseException e) {
-                    if ( e == null) {
-                        for (ParseObject slot : list) {
-                            if (slot.get("room") == null) { // Only if room is not stated
-                                slot.put("room", ParseUser.getCurrentUser().get("room"));
-                                slot.put("reserver", ParseObject
-                                        .createWithoutData("_User", ParseUser.getCurrentUser().getObjectId()));
-
-                                Log.e("Parse Object", "The time:" + slot.get("startTime"));
-
-                                slot.saveEventually(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        if (e == null) {
-                                            Log.i("Parse Object", " Saved");
-                                            Toast.makeText(getApplicationContext(), "Reservation at "
-                                                    + item.getDate() + ", " + item.getTime() + " has been saved"
-                                                    , Toast.LENGTH_LONG).show();
-                                            item.setReserver(ParseUser.getCurrentUser().getInt("room"));
+                    if (e == null) {
+                        if (list.size() != 0) {
+//                            for (ParseObject slot : list) {
+//                                if (slot.get("room") == null) { // Only if room is not stated
+//                                    slot.put("room", ParseUser.getCurrentUser().get("room"));
+//                                    slot.put("reserver", ParseObject
+//                                            .createWithoutData("_User", ParseUser.getCurrentUser().getObjectId()));
+//
+//                                    Log.e("Parse Object", "The time:" + slot.get("startTime"));
+//
+//                                    slot.saveEventually(new SaveCallback() {
+//                                        @Override
+//                                        public void done(ParseException e) {
+//                                            if (e == null) {
+//                                                Log.i("Parse Object", " Saved");
+//                                                Toast.makeText(getApplicationContext(), "Reservation at "
+//                                                        + item.getDate() + ", " + item.getTime() + " has been saved"
+//                                                        , Toast.LENGTH_LONG).show();
+//                                                item.setReserver(ParseUser.getCurrentUser().getInt("room"));
+////                                            weekList.get(dayPos).set(timePos, item);
+//                                                broadcastChangedISlotItem(item, dayPos, timePos);
+//                                            } else {
+//                                                Log.e("Parse Object", "Error " + e.toString());
+//                                            }
+//                                        }
+//                                    });
+//                                } else {
+                            Log.i("Parse Object", "Time taken!");
+                            Toast.makeText(getApplicationContext(), "Error: Time taken! Sorry...", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+                        } else {
+                            ParseObject newCloudBooking = new ParseObject("TimeSlots");
+                            newCloudBooking.put("room",ParseUser.getCurrentUser().getInt("room"));
+                            formatter = new SimpleDateFormat("EEEE");
+                            newCloudBooking.put("day",formatter.format(item.getStartCalendar().getTime()));
+                            newCloudBooking.put("startTime",item.getTime());
+                            newCloudBooking.put("reserver", ParseObject
+                                    .createWithoutData("_User", ParseUser.getCurrentUser().getObjectId()));
+                            newCloudBooking.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        Log.i("Parse Object", " Saved");
+                                        Toast.makeText(getApplicationContext(), "Reservation at "
+                                                + item.getDate() + ", " + item.getTime() + " has been saved"
+                                                , Toast.LENGTH_LONG).show();
+                                        item.setReserver(ParseUser.getCurrentUser().getInt("room"));
 //                                            weekList.get(dayPos).set(timePos, item);
-                                            broadcastChangedISlotItem( item, dayPos, timePos);
-                                        } else {
-                                            Log.e("Parse Object", "Error " + e.toString());
-                                        }
+                                        broadcastChangedISlotItem(item, dayPos, timePos);
+                                    } else {
+                                        Log.e("Parse Object", "Error " + e.toString());
                                     }
-                                });
-                            } else {
-                                Log.i("Parse Object", "Time taken!");
-                                Toast.makeText(getApplicationContext(), "Error: Time taken! Sorry...", Toast.LENGTH_SHORT).show();
-                            }
+                                }
+                            });
                         }
-
-                    } else Log.e("Parse","couldn't list timeSlots" + e.toString());
+                    } else Log.e("Parse", "couldn't list timeSlots" + e.toString());
                 }
             });
 
@@ -320,6 +349,7 @@ public class MainActivity extends ActionBarActivity
 
         slotItemList    = timeSlotFac.getTimeSlotItemList((Calendar) start.clone(), 24, (Calendar) length.clone());
         weekList        = timeSlotFac.getWeekList((Calendar) start.clone(), 24, (Calendar) length.clone());
+        getBookingsInCloud();
 
 //        ISlotItem item;
 //        String weekday = "EEEE";
@@ -406,19 +436,45 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-//    public void getBookingsInCloud(ArrayList<ArrayList<ISlotItem>> weekList)
-//    {
-//        ParseQuery<ParseObject> query = ParseQuery.getQuery("TimeSlots");
-//
-//        formatter = new SimpleDateFormat((""));
-//
-//        query.findInBackground(new FindCallback<ParseObject>() {
-//            @Override
-//            public void done(List<ParseObject> list, ParseException e) {
-//                list.
-//            }
-//        });
-//    }
+    private void getBookingsInCloud()
+    {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("TimeSlots");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+
+                Calendar tmpDay = Calendar.getInstance();
+                int daysFromToday = 0;
+                formatter = new SimpleDateFormat(("EEEE"));
+                ArrayList<ArrayList<ISlotItem>> tmpWeekList = weekList;
+                for (ParseObject booking : list) {
+                    // Check how many days current is from today
+                    String cloudDay = booking.getString("day");
+                    for (int i = 0; i < 7; i++) {
+                        tmpDay.add(Calendar.HOUR_OF_DAY, i * 24);
+
+                        if (cloudDay.equals(formatter.format(tmpDay.getTime()))) {
+                            daysFromToday = i;
+                            break;
+                        }
+                        tmpDay = Calendar.getInstance();
+                    }
+
+
+                    for (ISlotItem item : tmpWeekList.get(daysFromToday)) {
+                        if (item.getTime().equals(booking.getString("startTime"))) {
+                            item.setReserver(booking.getInt("room"));
+                            tmpWeekList.get(daysFromToday)
+                                    .set(tmpWeekList.get(daysFromToday).indexOf(item), item);
+                            break;
+                        }
+                    }
+                }
+                broadcastBookings(tmpWeekList);
+
+            }
+        });
+    }
 
     private void broadcastChangedISlotItem(ISlotItem item, int dayPos, int timePos)
     {
@@ -430,6 +486,32 @@ public class MainActivity extends ActionBarActivity
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
     }
+    private void broadcastBookings(ArrayList<ArrayList<ISlotItem>> list)
+    {
+        Intent intent = new Intent("bookingsReceived");
+        intent.putExtra("list", (Serializable) list);;
+        // Sends the Intent with the LocalBroadcastManager
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+    }
+
+
+    private BroadcastReceiver bookingsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("Main", "bookings Received");
+
+            try {
+                Log.i("Main receive B", "Try cast");
+
+                ArrayList<ArrayList<ISlotItem>> items = (ArrayList<ArrayList<ISlotItem>>) intent.getSerializableExtra("list");
+                weekList = items;
+            } catch (ClassCastException e) {
+                throw new ClassCastException("Problem with cast to ISlotItem");
+            }
+
+        }
+    };
 
     /**
      * A placeholder fragment containing a simple view.
