@@ -1,0 +1,14 @@
+{
+  "global": {
+    "parseVersion": "1.4.2"
+  },
+  "applications": {
+    "OMA Wash": {
+      "applicationId": "UzIlMkzLB6oLzvlO7UaQFHurRleDm9EhpqsLM3ra",
+      "masterKey": "4d8RVo5di2H7gLxfZiC0soHHXj4qWIHSvwE8LesK"
+    },
+    "_default": {
+      "link": "OMA Wash"
+    }
+  }
+}

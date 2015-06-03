@@ -265,6 +265,9 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
+
+        Log.e("onSelect", " " +fragmentManager.getBackStackEntryCount());
+
         switch(position){
             case 0:
                 if (phoneMode == PhoneMode.PORTRAIT){ // If portrait use DayFragment
