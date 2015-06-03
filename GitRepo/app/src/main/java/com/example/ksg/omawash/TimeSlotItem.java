@@ -18,6 +18,7 @@ public class TimeSlotItem implements ISlotItem, Serializable{
     SimpleDateFormat timeFormat;
     SimpleDateFormat dateFormat;
     SimpleDateFormat dateTitleFormat;
+    SimpleDateFormat weekDayFormatter;
 
     int room;
 
@@ -29,6 +30,7 @@ public class TimeSlotItem implements ISlotItem, Serializable{
         this.timeFormat = new SimpleDateFormat("HH:mm");
         this.dateTitleFormat = new SimpleDateFormat("d MMM");
 
+        this.weekDayFormatter = new SimpleDateFormat("EEEE");
         this.dateFormat = new SimpleDateFormat(dateFormat);
 
         room = -1;
@@ -52,6 +54,11 @@ public class TimeSlotItem implements ISlotItem, Serializable{
     @Override
     public void setStartTime(Calendar startTime) {
         this.slotStartTime = startTime;
+    }
+
+    @Override
+    public String getWeekDay() {
+        return weekDayFormatter.format(slotStartTime.getTime());
     }
 
     @Override

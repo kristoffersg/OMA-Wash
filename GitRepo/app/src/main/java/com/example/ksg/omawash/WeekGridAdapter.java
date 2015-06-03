@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 public class WeekGridAdapter extends BaseAdapter {
 
     Context context;
-    TimeSlotItem slotTime;
     ArrayList<ArrayList<ISlotItem>> list;
     int count = 25*8;
 
@@ -75,85 +75,41 @@ public class WeekGridAdapter extends BaseAdapter {
         if (row == 0)
         {
 
-
-            view.setBackground(context.getResources().getDrawable(R.drawable.line_bottom_thick));
-            switch (column)
+            if ( column != 0)
             {
+                timeDateRoom.setText(list.get(column-1).get(row).getWeekDay());
+                info.setText(list.get(column-1).get(row).getDateTitle());
+                view.setBackground(context.getResources().getDrawable(R.drawable.line_bottom_thick));
+                timeDateRoom.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
+            } else {
 
-                case 0 :
-                    timeDateRoom.setText("");
-                    info.setText("");
-                    view.setBackground(context.getResources().getDrawable(R.drawable.line_bottom_right_thick));
+                timeDateRoom.setText("");
+                info.setText("");
+                view.setBackground(context.getResources().getDrawable(R.drawable.line_bottom_right_thick));
 
-                    break;
-                case 1 :
-                    timeDateRoom.setText(context.getString(R.string.mon));
-                    info.setText(list.get(column-1).get(row).getDateTitle());
-                    break;
-                case 2:
-                    timeDateRoom.setText(context.getString(R.string.tue));
-                    info.setText(list.get(column-1).get(row).getDateTitle());
-                    break;
-                case 3:
-                    timeDateRoom.setText(context.getString(R.string.wed));
-                    info.setText(list.get(column-1).get(row).getDateTitle());
-
-                    break;
-                case 4:
-                    timeDateRoom.setText(context.getString(R.string.thu));
-                    info.setText(list.get(column-1).get(row).getDateTitle());
-
-                    break;
-                case 5:
-                    timeDateRoom.setText(context.getString(R.string.fri));
-                    info.setText(list.get(column-1).get(row).getDateTitle());
-
-                    break;
-                case 6:
-                    timeDateRoom.setText(context.getString(R.string.sat));
-                    info.setText(list.get(column-1).get(row).getDateTitle());
-
-                    break;
-                case 7:
-                    timeDateRoom.setText(context.getString(R.string.sun));
-                    info.setText(list.get(column-1).get(row).getDateTitle());
-
-                    break;
             }
-
-
-//            slotTime.setText("");//list.get(position).getTime());
-//            slotEndTime.setText("");
-//            reserver.setText("");
-//
-//            view.setBackground(context.getResources().getDrawable(R.drawable.line_right_thick));
-            //view.setBackgroundDrawable(getResources().getDrawable(R.drawable.line_right_thick));
         }
         else if( column == 0 )
         {
-//            ArrayList<ISlotItem> listlist =  list.get(column);
-//            ISlotItem item = listlist.get(offSetRow);
-//            String timeText = item.getTime();
-            timeDateRoom.setText(list.get(column).get(offSetRow).getTime());//list.get(position).getTime());
+
+            timeDateRoom.setText(list.get(column).get(offSetRow).getTime());
             info.setText("Ends " + list.get(column).get(offSetRow).getEndTime());
             timeDateRoom.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
 
             view.setBackground(context.getResources().getDrawable(R.drawable.line_right_thick));
-            //view.setBackgroundDrawable(getResources().getDrawable(R.drawable.line_right_thick));
+
 
         } else
         {
             int offSetColumn = column-1;
             view.setBackground(context.getResources().getDrawable(R.drawable.line_right));
 
-            info.setText("");//list.get(position).getTime());
+            info.setText("");
             timeDateRoom.setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
             if (list.get(offSetColumn).get(offSetRow).getReserver() <= 0)
             {
-                //Log.i("Reserved check","Not reserved, room " + Integer.toString(list.get(position).getReserver()));
                 timeDateRoom.setText(context.getString(R.string.notReserved));
             } else{
-                //Log.i("Reserved check","Reserved, room " + Integer.toString(list.get(position).getReserver()) + "Time " + list.get(position).getTime() );
                 timeDateRoom.setText(context.getString(R.string.reserved) + " " + list.get(offSetColumn).get(offSetRow).getReserver());
             }
 

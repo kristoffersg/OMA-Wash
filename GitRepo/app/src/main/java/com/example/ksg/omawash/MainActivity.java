@@ -222,7 +222,7 @@ public class MainActivity extends ActionBarActivity
             public void done(ParseUser parseUser, ParseException e) {
                 if (parseUser == null) {
                     Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
-                    mNavigationDrawerFragment.changeLogInStatus(true, 0);
+                    mNavigationDrawerFragment.changeLogInStatus(false, 0);
                 } else if (parseUser.isNew()) {
                     Log.d("MyApp", "User signed up and logged in through Facebook!");
                     mNavigationDrawerFragment.changeLogInStatus(true, 0);
@@ -455,14 +455,17 @@ public class MainActivity extends ActionBarActivity
 
                         if (cloudDay.equals(formatter.format(tmpDay.getTime()))) {
                             daysFromToday = i;
+                            tmpDay = Calendar.getInstance();
                             break;
                         }
                         tmpDay = Calendar.getInstance();
                     }
-
-
+                    String timeItem = "";
+                    String timeBooking = "";
                     for (ISlotItem item : tmpWeekList.get(daysFromToday)) {
                         if (item.getTime().equals(booking.getString("startTime"))) {
+                            timeItem = item.getTime();
+                            timeBooking = booking.getString("startTime");
                             item.setReserver(booking.getInt("room"));
                             tmpWeekList.get(daysFromToday)
                                     .set(tmpWeekList.get(daysFromToday).indexOf(item), item);
@@ -471,7 +474,6 @@ public class MainActivity extends ActionBarActivity
                     }
                 }
                 broadcastBookings(tmpWeekList);
-
             }
         });
     }

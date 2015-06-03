@@ -14,6 +14,8 @@ public interface ISlotItem{
 
     void setStartTime(Calendar startTime);
 
+    String getWeekDay();
+
     String getSlotLength();
 
     String getEndTime();

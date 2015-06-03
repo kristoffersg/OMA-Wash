@@ -48,8 +48,8 @@ public class CalendarDayAdapter extends PagerAdapter {
 
     public void updateCalendarView(ArrayList<ArrayList<ISlotItem>> list,int dayPos) {
         this.weekList = list;
-        listViewAdapters.get(dayPos).notifyDataSetChanged();
-//        this.notifyDataSetChanged();
+        if (listViewAdapters.size() != 0)
+            listViewAdapters.get(dayPos).notifyDataSetChanged();
     }
 
     public void setWeekList(ArrayList<ArrayList<ISlotItem>> weekList) {
@@ -69,11 +69,6 @@ public class CalendarDayAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(final ViewGroup container, final int position) {
 
-//        if(view == null)
-//        {
-////            view = (LinearLayout) inflater.inflate(R.layout.fragment_day,null);
-//            view = inflater.inflate(R.layout.fragment_day, container, false);
-//        }
         View view = inflater.inflate(R.layout.fragment_day, container, false);
 
         TextView dateTitle = (TextView) view.findViewById(R.id.dateTitle);
@@ -90,7 +85,7 @@ public class CalendarDayAdapter extends PagerAdapter {
             }
         });
 
-        dateTitle.setText(weekList.get(position).get(0).getDateTitle());
+        dateTitle.setText( weekList.get(position).get(0).getWeekDay() + " - " + weekList.get(position).get(0).getDateTitle());
         dateTitle.setTextColor(context.getResources().getColor(R.color.primary_dark_material_light));
 
         listViewAdapters.add(new ListViewTimeSlotsAdapter(context, weekList.get(position)));
