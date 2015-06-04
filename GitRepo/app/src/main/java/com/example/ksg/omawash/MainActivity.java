@@ -228,9 +228,14 @@ public class MainActivity extends ActionBarActivity
                 }
                 break;
             case 1:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, MyBookingsFragment.newInstance(position + 1, weekList))
-                        .commit();
+                if (ParseUser.getCurrentUser() != null )
+                {
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, MyBookingsFragment.newInstance(position + 1, weekList))
+                            .commit();
+                }
+                else createParseUser();
+
                 break;
             case 2:
                 fragmentManager.beginTransaction()

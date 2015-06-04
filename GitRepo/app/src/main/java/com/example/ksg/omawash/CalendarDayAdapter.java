@@ -77,19 +77,17 @@ public class CalendarDayAdapter extends PagerAdapter {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: Pass the item on
                 ISlotItem item = (ISlotItem) adapterView.getItemAtPosition(i);
                 Log.i("ListViewAdapter", "Date : " + item.getDate() + " Time: " + item.getTime());
                 dayViewPagerContainer.onDayCalendarItemClicked(item, position, i);
             }
         });
 
-        dateTitle.setText( weekList.get(position).get(0).getWeekDay() + " - " + weekList.get(position).get(0).getDateTitle());
+        dateTitle.setText(weekList.get(position).get(0).getWeekDay() + " - " + weekList.get(position).get(0).getDateTitle());
         dateTitle.setTextColor(context.getResources().getColor(R.color.primary_dark_material_light));
 
         listViewAdapters.add(new ListViewTimeSlotsAdapter(context, weekList.get(position)));
         listView.setAdapter(listViewAdapters.get(position));
-
         container.addView(view);
         return view;
     }

@@ -27,8 +27,6 @@ import com.facebook.login.widget.LoginButton;
  */
 public class LoginFragment extends Fragment {
 
-    private ILoginFragment mListener;
-    private LoginButton loginButton;
 
     private static final String ARG_SECTION   = "section_number";
     private int sectionNumber;
@@ -38,7 +36,6 @@ public class LoginFragment extends Fragment {
         LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION, sectionNumber);
-//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,18 +44,10 @@ public class LoginFragment extends Fragment {
         // Required empty public constructor
     }
 
-    CallbackManager callbackManager;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-//        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
 
-//        callbackManager = CallbackManager.Factory.create();
 
 
     }
@@ -70,40 +59,12 @@ public class LoginFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
-        //Facebook login button
-        //View view = inflater.inflate(R.layout.splash, container, false);
-//
-//        loginButton = (LoginButton) rootView.findViewById(R.id.login_button);
-//        loginButton.setReadPermissions("user_friends");
-
-        // If using in a fragment
-//        loginButton.setFragment(this);
-        // Other app specific specialization
-
-        // Callback registration
-//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                mListener.onLoginSucces();
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                mListener.onLoginCancel();
-//            }
-//
-//            @Override
-//            public void onError(FacebookException exception) {
-//                mListener.onLoginError();
-//            }
-//        });
 
         return rootView;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
     }
@@ -119,7 +80,6 @@ public class LoginFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (ILoginFragment) activity;
             ((LoginFragment.IMenuBarTitle) activity).changeMenuBarTitle(getArguments().getInt(ARG_SECTION));
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
@@ -130,25 +90,9 @@ public class LoginFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface ILoginFragment {
-        public void onLoginSucces();
-        public void onLoginCancel();
-        public void onLoginError();
-        public void createParseUser();
-    }
+
 
     public interface IMenuBarTitle{
         public void changeMenuBarTitle(int sectionNumber);
