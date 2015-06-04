@@ -19,9 +19,6 @@ public class TimeSlotFactory implements ISlotFactory {
         this.dateFormat = dateFormat;
     }
 
-    /*
-        The slots should at least be 10 min
-    */
 
     public ArrayList<ArrayList<ISlotItem>> getWeekList(Calendar start, int Amount, Calendar length)
     {

@@ -27,13 +27,11 @@ import java.util.ArrayList;
 
 
 public class DayFragment extends Fragment implements CalendarDayAdapter.IDayViewPagerContainer{
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_SECTION = "sectionNumber";
     private static final String ARG_LIST   = "slotList";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private ArrayList<ArrayList<ISlotItem>> weekList;
 
@@ -52,8 +50,6 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
     public static DayFragment newInstance(String param1, String param2, ArrayList<ISlotItem> list) {
         DayFragment fragment = new DayFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
         args.putSerializable(ARG_LIST, list);
         fragment.setArguments(args);
         return fragment;
@@ -62,7 +58,6 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
     public static DayFragment newInstance( int sectionNumber,  ArrayList<ArrayList<ISlotItem>> list) {
         DayFragment fragment = new DayFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, ""); // should not be here
         args.putInt(ARG_SECTION, sectionNumber);
         args.putSerializable(ARG_LIST, list);
 
@@ -71,7 +66,6 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
     }
 
     public DayFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -99,26 +93,10 @@ public class DayFragment extends Fragment implements CalendarDayAdapter.IDayView
         pagerAdapter = new CalendarDayAdapter(this, getActivity().getApplicationContext(), weekList);
         pager.setAdapter(pagerAdapter);
 
-//        ListView listView;
-//        String date = list.get(0).get(0).getDateTitle();
-//
-//        TextView dateTv = (TextView) rootView.findViewById(R.id.dateTitle);
-//        dateTv.setText(date);
-//
-//        listView = (ListView) rootView.findViewById(R.id.listViewDay);
-//        ListViewTimeSlotsAdapter adapter = new ListViewTimeSlotsAdapter(getActivity()
-//                .getApplicationContext(),list.get(0));
-//
-//        listView.setAdapter(adapter);
-
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
     }
 
     @Override

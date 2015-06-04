@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import com.facebook.FacebookSdk;
+import com.google.android.gms.appdatasearch.GetRecentContextCall;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
@@ -93,6 +94,9 @@ public class MainActivity extends ActionBarActivity
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout), loggedIn);
+
+
+
 
     }
 
@@ -197,14 +201,7 @@ public class MainActivity extends ActionBarActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
-//        if(loginFragment != null) {
-//            loginFragment.onActivityResult(requestCode, resultCode, data);
-//        }
-//        Fragment fragment = getFragmentManager().findFragmentById(R.id.container);
 //
-//        if (fragment.getTag().equals("loginfragment")){
-//            fragment.onActivityResult(requestCode, resultCode, data);
-//        }
     }
 
     @Override

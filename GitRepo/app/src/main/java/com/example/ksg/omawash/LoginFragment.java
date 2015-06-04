@@ -17,14 +17,7 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link com.example.ksg.omawash.LoginFragment.ILoginFragment} interface
- * to handle interaction events.
- * Use the {@link LoginFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class LoginFragment extends Fragment {
 
 
@@ -69,10 +62,7 @@ public class LoginFragment extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.ILoginFragment();
 //        }
     }
 

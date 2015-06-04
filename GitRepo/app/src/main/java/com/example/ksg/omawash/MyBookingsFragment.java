@@ -140,7 +140,6 @@ public class MyBookingsFragment extends Fragment implements AbsListView.OnItemCl
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-//            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 
@@ -168,7 +167,6 @@ public class MyBookingsFragment extends Fragment implements AbsListView.OnItemCl
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
     }
 
