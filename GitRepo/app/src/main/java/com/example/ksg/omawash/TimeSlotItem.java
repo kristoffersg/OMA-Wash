@@ -52,11 +52,6 @@ public class TimeSlotItem implements ISlotItem, Serializable{
     }
 
     @Override
-    public void setStartTime(Calendar startTime) {
-        this.slotStartTime = startTime;
-    }
-
-    @Override
     public String getWeekDay() {
         return weekDayFormatter.format(slotStartTime.getTime());
     }

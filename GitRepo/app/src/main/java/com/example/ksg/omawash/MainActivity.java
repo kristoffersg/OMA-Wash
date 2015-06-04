@@ -238,9 +238,13 @@ public class MainActivity extends ActionBarActivity
 
                 break;
             case 2:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                        .commit();
+                if (ParseUser.getCurrentUser() != null )
+                {
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                            .commit();
+                }
+                else createParseUser();
                 break;
             case 3:
 
