@@ -78,7 +78,6 @@ public class CalendarDayAdapter extends PagerAdapter {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // TODO: Pass the item on
-
                 ISlotItem item = (ISlotItem) adapterView.getItemAtPosition(i);
                 Log.i("ListViewAdapter", "Date : " + item.getDate() + " Time: " + item.getTime());
                 dayViewPagerContainer.onDayCalendarItemClicked(item, position, i);

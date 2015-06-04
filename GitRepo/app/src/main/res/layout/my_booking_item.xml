@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/bookingItemView">
+
+    <LinearLayout
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/bookingDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_dark_material_dark"
+            android:text="Tuesday"
+            />
+
+        <TextView
+            android:id="@+id/bookingDate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Time ends at O'clock"
+            android:textColor="@color/primary_dark_material_light"
+            android:layout_gravity="center_vertical"
+            android:textAlignment="center"
+            android:gravity="right"
+            android:textSize="11sp"
+            android:layout_marginLeft="4dp"
+            />
+        <!--<View-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_marginLeft="4dp"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/light_gray"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_marginTop="1dp"-->
+        <!--></View>-->
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/bookTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="00:02"
+        android:textColor="@color/primary_dark_material_dark"
+        android:gravity="left"
+        android:layout_gravity="center"
+        android:layout_marginLeft="4dp"
+        />
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:id="@+id/reservedTextView"-->
+    <!--android:layout_height="16dp"-->
+    <!--android:gravity="center"-->
+    <!--android:text="Reserved?"-->
+    <!-->-->
+    <!--</TextView>-->
+
+</LinearLayout>
