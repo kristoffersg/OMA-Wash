@@ -159,7 +159,11 @@ public class MainActivity extends ActionBarActivity
                 }
             });
 
-        } else onNavigationDrawerItemSelected(3);
+        } else
+        {
+            Toast.makeText(getApplicationContext(), "You are not a valid user! Sorry...", Toast.LENGTH_SHORT).show();
+            createParseUser();
+        }
     }
 
     public void createParseUser(){
